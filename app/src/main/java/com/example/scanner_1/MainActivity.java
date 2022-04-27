@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListAdapter;
@@ -129,9 +130,7 @@ public class MainActivity extends AppCompatActivity {
                             .setMessage(msg)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
+                                public void onClick(DialogInterface dialog, int which) {}
                             })
                             .setNeutralButton("CONNECT", new DialogInterface.OnClickListener() {
                                 @Override
@@ -292,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
             if(!listBluetoothDevice.contains(device)){
                 listBluetoothDevice.add(device);
                 listViewLE.invalidateViews();
+                ((BaseAdapter) listViewLE.getAdapter()).notifyDataSetChanged();
             }
         }
     };
