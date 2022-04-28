@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -31,13 +32,13 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate()
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
@@ -63,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
+                != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.BLUETOOTH_CONNECT,
                     Manifest.permission.BLUETOOTH_SCAN,
@@ -108,7 +110,24 @@ public class MainActivity extends AppCompatActivity {
 
         listBluetoothDevice = new ArrayList<>();
         adapterLeScanResult = new ArrayAdapter<BluetoothDevice>(
-                this, android.R.layout.simple_list_item_1, listBluetoothDevice);
+                this, android.R.layout.simple_list_item_1, listBluetoothDevice) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView view = (TextView) super.getView(position, convertView, parent);
+                String deviceName, deviceAddress, textView;
+
+                deviceName = getItem(position).getName();
+                deviceAddress = getItem(position).getAddress();
+
+                if(deviceName == null) {
+                    textView = deviceAddress;
+                }else{
+                    textView = deviceName + '\n' + deviceAddress;
+                }
+                view.setText(textView);
+                return view;
+            }
+        };
         listViewLE.setAdapter(adapterLeScanResult);
         listViewLE.setOnItemClickListener(scanResultOnItemClickListener);
 
@@ -263,11 +282,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private ScanCallback scanCallback = new ScanCallback() {
+    private final ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-
             addBluetoothDevice(result.getDevice());
         }
 
