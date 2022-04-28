@@ -1,5 +1,6 @@
 package com.example.scanner_1;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate()
+@RequiresApi(api = Build.VERSION_CODES.S)
 public class ControlActivity extends AppCompatActivity {
     private final static String TAG = ControlActivity.class.getSimpleName();
 
@@ -126,31 +130,36 @@ public class ControlActivity extends AppCompatActivity {
         for (BluetoothGattService gattService : gattServices) {
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             uuid = gattService.getUuid().toString();
-            currentServiceData.put(
-                    LIST_NAME, lookup(uuid, UNKNOWN_SERVICE_STR));
-            currentServiceData.put(LIST_UUID, uuid);
-            gattServiceData.add(currentServiceData);
 
-            ArrayList<HashMap<String, String>> gattCharacteristicGroupData =
-                    new ArrayList<HashMap<String, String>>();
-            List<BluetoothGattCharacteristic> gattCharacteristics =
-                    gattService.getCharacteristics();
-            ArrayList<BluetoothGattCharacteristic> charas =
-                    new ArrayList<BluetoothGattCharacteristic>();
+            if (AllGattServices.contains(uuid)) {
+                currentServiceData.put(
+                        LIST_NAME, AllGattServices.lookup(uuid, UNKNOWN_SERVICE_STR));
+                currentServiceData.put(LIST_UUID, uuid);
+                gattServiceData.add(currentServiceData);
 
-            // Loops through available Characteristics.
-            for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-                charas.add(gattCharacteristic);
-                HashMap<String, String> currentCharaData = new HashMap<String, String>();
-                uuid = gattCharacteristic.getUuid().toString();
-                currentCharaData.put(
-                        LIST_NAME, lookup(uuid, UNKNOWN_CHARA_STR));
-                currentCharaData.put(LIST_UUID, uuid);
-                gattCharacteristicGroupData.add(currentCharaData);
+                ArrayList<HashMap<String, String>> gattCharacteristicGroupData =
+                        new ArrayList<HashMap<String, String>>();
+                List<BluetoothGattCharacteristic> gattCharacteristics =
+                        gattService.getCharacteristics();
+                ArrayList<BluetoothGattCharacteristic> charas =
+                        new ArrayList<BluetoothGattCharacteristic>();
 
+                // Loops through available Characteristics.
+                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                    HashMap<String, String> currentCharaData = new HashMap<String, String>();
+                    uuid = gattCharacteristic.getUuid().toString();
+
+                    if (AllGattCharacteristics.contains(uuid)) {
+                        charas.add(gattCharacteristic);
+                        currentCharaData.put(
+                                LIST_NAME, AllGattCharacteristics.lookup(uuid, UNKNOWN_CHARA_STR));
+                        currentCharaData.put(LIST_UUID, uuid);
+                        gattCharacteristicGroupData.add(currentCharaData);
+                    }
+                }
+                mGattCharacteristics.add(charas);
+                gattCharacteristicData.add(gattCharacteristicGroupData);
             }
-            mGattCharacteristics.add(charas);
-            gattCharacteristicData.add(gattCharacteristicGroupData);
         }
 
         SimpleExpandableListAdapter gattServiceAdapter = new SimpleExpandableListAdapter(

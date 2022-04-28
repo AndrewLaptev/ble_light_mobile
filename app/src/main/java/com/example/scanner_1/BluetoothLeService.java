@@ -31,6 +31,7 @@ import java.util.UUID;
  * given Bluetooth LE device.
  */
 
+@SuppressWarnings({"MissingPermission"}) // all needed permissions granted in MainActivity.onCreate()
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class BluetoothLeService extends Service {
     private final static String TAG = BluetoothLeService.class.getSimpleName();
@@ -39,7 +40,7 @@ public class BluetoothLeService extends Service {
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
-    private int mConnectionState = STATE_DISCONNECTED;
+    protected int mConnectionState = STATE_DISCONNECTED;
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
