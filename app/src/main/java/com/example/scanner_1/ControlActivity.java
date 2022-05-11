@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,7 +190,8 @@ public class ControlActivity extends AppCompatActivity {
                         final BluetoothGattCharacteristic characteristic =
                                 mGattCharacteristics.get(groupPosition).get(childPosition);
                         final int charaProp = characteristic.getProperties();
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+
+                        if ((charaProp - BluetoothGattCharacteristic.PROPERTY_READ) == 0) {
                             // If there is an active notification on a characteristic, clear
                             // it first so it doesn't update the data field on the user interface.
                             if (mNotifyCharacteristic != null) {
@@ -198,11 +200,13 @@ public class ControlActivity extends AppCompatActivity {
                                 mNotifyCharacteristic = null;
                             }
                             mBluetoothLeService.readCharacteristic(characteristic);
-                        }
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                        } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
                             mNotifyCharacteristic = characteristic;
-                            mBluetoothLeService.setCharacteristicNotification(
-                                    characteristic, true);
+                            mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+                        } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) {
+                            Toast.makeText(ControlActivity.this,
+                                    "Writable!",
+                                    Toast.LENGTH_LONG).show();
                         }
                         return true;
                     }
