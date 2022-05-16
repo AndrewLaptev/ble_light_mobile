@@ -1,6 +1,7 @@
 package com.example.scanner_1;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -8,6 +9,7 @@ import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
@@ -67,6 +70,7 @@ public class ControlActivity extends AppCompatActivity {
             mBluetoothLeService = null;
         }
     };
+
 
     // Handles various events fired by the Service.
     // ACTION_GATT_CONNECTED: connected to a GATT server.
@@ -132,35 +136,31 @@ public class ControlActivity extends AppCompatActivity {
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             uuid = gattService.getUuid().toString();
 
-            if (AllGattServices.contains(uuid)) {
-                currentServiceData.put(
-                        LIST_NAME, AllGattServices.lookup(uuid, UNKNOWN_SERVICE_STR));
-                currentServiceData.put(LIST_UUID, uuid);
-                gattServiceData.add(currentServiceData);
+            currentServiceData.put(
+                    LIST_NAME, AllGattServices.lookup(uuid, UNKNOWN_SERVICE_STR));
+            currentServiceData.put(LIST_UUID, uuid);
+            gattServiceData.add(currentServiceData);
 
-                ArrayList<HashMap<String, String>> gattCharacteristicGroupData =
-                        new ArrayList<HashMap<String, String>>();
-                List<BluetoothGattCharacteristic> gattCharacteristics =
-                        gattService.getCharacteristics();
-                ArrayList<BluetoothGattCharacteristic> charas =
-                        new ArrayList<BluetoothGattCharacteristic>();
+            ArrayList<HashMap<String, String>> gattCharacteristicGroupData =
+                    new ArrayList<HashMap<String, String>>();
+            List<BluetoothGattCharacteristic> gattCharacteristics =
+                    gattService.getCharacteristics();
+            ArrayList<BluetoothGattCharacteristic> charas =
+                    new ArrayList<BluetoothGattCharacteristic>();
 
-                // Loops through available Characteristics.
-                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-                    HashMap<String, String> currentCharaData = new HashMap<String, String>();
-                    uuid = gattCharacteristic.getUuid().toString();
+            // Loops through available Characteristics.
+            for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                HashMap<String, String> currentCharaData = new HashMap<String, String>();
+                uuid = gattCharacteristic.getUuid().toString();
 
-                    if (AllGattCharacteristics.contains(uuid)) {
-                        charas.add(gattCharacteristic);
-                        currentCharaData.put(
-                                LIST_NAME, AllGattCharacteristics.lookup(uuid, UNKNOWN_CHARA_STR));
-                        currentCharaData.put(LIST_UUID, uuid);
-                        gattCharacteristicGroupData.add(currentCharaData);
-                    }
-                }
-                mGattCharacteristics.add(charas);
-                gattCharacteristicData.add(gattCharacteristicGroupData);
+                charas.add(gattCharacteristic);
+                currentCharaData.put(
+                        LIST_NAME, AllGattCharacteristics.lookup(uuid, UNKNOWN_CHARA_STR));
+                currentCharaData.put(LIST_UUID, uuid);
+                gattCharacteristicGroupData.add(currentCharaData);
             }
+            mGattCharacteristics.add(charas);
+            gattCharacteristicData.add(gattCharacteristicGroupData);
         }
 
         SimpleExpandableListAdapter gattServiceAdapter = new SimpleExpandableListAdapter(
@@ -175,6 +175,25 @@ public class ControlActivity extends AppCompatActivity {
                 new int[] {android.R.id.text1, android.R.id.text2}
         );
         mGattServicesList.setAdapter(gattServiceAdapter);
+    }
+
+    private void showSentDialog(Context c, BluetoothGattCharacteristic characteristic) {
+        final EditText taskEditText = new EditText(c);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Send data")
+                .setMessage("Enter your string message")
+                .setView(taskEditText)
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        characteristic.setValue(String.valueOf(taskEditText.getText()));
+                        characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                        mBluetoothLeService.writeCharacteristic(characteristic);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
     }
 
     // If a given GATT characteristic is selected, check for supported features.  This sample
@@ -200,13 +219,34 @@ public class ControlActivity extends AppCompatActivity {
                                 mNotifyCharacteristic = null;
                             }
                             mBluetoothLeService.readCharacteristic(characteristic);
+                            Toast.makeText(ControlActivity.this,
+                                    "Readable!",
+                                    Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
                             mNotifyCharacteristic = characteristic;
                             mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+                            Toast.makeText(ControlActivity.this,
+                                    "Notify!",
+                                    Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) {
                             Toast.makeText(ControlActivity.this,
                                     "Writable!",
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_SHORT).show();
+                        } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_BROADCAST) == 0) {
+                            Toast.makeText(ControlActivity.this,
+                                    "Broadcast!",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_INDICATE) == 0) {
+                            Toast.makeText(ControlActivity.this,
+                                    "Indicate!",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE - BluetoothGattCharacteristic.PROPERTY_READ
+                        - BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
+                            Toast.makeText(ControlActivity.this,
+                                    "Read, Write and Notify!",
+                                    Toast.LENGTH_SHORT).show();
+
+                            showSentDialog(ControlActivity.this, characteristic);
                         }
                         return true;
                     }
