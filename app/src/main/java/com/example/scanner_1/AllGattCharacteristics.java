@@ -227,6 +227,8 @@ public class AllGattCharacteristics {
         attributes.put("00002b1e-0000-1000-8000-00805f9b34fb", "RC Settings");
         attributes.put("00002b1f-0000-1000-8000-00805f9b34fb", "Reconnection Configuration Control Point");
 
+        attributes.put("00007701-0000-1000-8000-00805f9b34fb", "Authorization data");
+        attributes.put("00008801-0000-1000-8000-00805f9b34fb", "Level of light");
     }
 
     public static boolean contains(String uuid) {

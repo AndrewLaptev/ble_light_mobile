@@ -60,7 +60,10 @@ public class AllGattServices {
         attributes.put("00002a03-0000-1000-8000-00805f9b34fb", "Reconnection Address");
         attributes.put("00002a04-0000-1000-8000-00805f9b34fb", "Manufacturer Name String");
         attributes.put("00002a05-0000-1000-8000-00805f9b34fb", "Service Changed");
-        attributes.put("00002A06-0000-1000-8000-00805f9b34fb", "Alert level");
+        attributes.put("00002a06-0000-1000-8000-00805f9b34fb", "Alert level");
+
+        attributes.put("00000077-0000-1000-8000-00805f9b34fb", "Authentication");
+        attributes.put("00000088-0000-1000-8000-00805f9b34fb", "Light manage");
     }
 
     public static boolean contains(String uuid) {
