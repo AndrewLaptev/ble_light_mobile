@@ -52,7 +52,7 @@
         android:layout_marginEnd="4dp"
         android:checked="false"
         android:showText="true"
-        android:text="Mesh filter"
+        android:text="ESP_LIGHT filter"
         android:textOff="OFF"
         android:textOn="ON"
         android:textSize="16sp"

@@ -223,8 +223,7 @@ public class ControlActivity extends AppCompatActivity {
                                     "Readable!",
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
-                            mNotifyCharacteristic = characteristic;
-                            mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+                            mBluetoothLeService.setCharacteristicNotification(mNotifyCharacteristic, true);
                             Toast.makeText(ControlActivity.this,
                                     "Notify!",
                                     Toast.LENGTH_SHORT).show();

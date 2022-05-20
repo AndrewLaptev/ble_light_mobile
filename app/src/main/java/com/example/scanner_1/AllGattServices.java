@@ -1,6 +1,7 @@
 package com.example.scanner_1;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class AllGattServices {
@@ -40,7 +41,7 @@ public class AllGattServices {
         attributes.put("0000181f-0000-1000-8000-00805f9b34fb", "Continuous Glucose Monitoring");
         attributes.put("00001820-0000-1000-8000-00805f9b34fb", "Internet Protocol Support Service");
         attributes.put("00001821-0000-1000-8000-00805f9b34fb", "Indoor Positioning");
-        attributes.put("00001822-0000-1000-8000-00805f9b34fb", "Pulse Oximeter Service");
+        attributes.put("00001822-0000-1000-8000-00805f9b34fb", "Pulse Oximetry Service");
         attributes.put("00001823-0000-1000-8000-00805f9b34fb", "HTTP Proxy");
         attributes.put("00001824-0000-1000-8000-00805f9b34fb", "Transport Discovery");
         attributes.put("00001825-0000-1000-8000-00805f9b34fb", "Object Transfer Service");
@@ -49,21 +50,9 @@ public class AllGattServices {
         attributes.put("00001828-0000-1000-8000-00805f9b34fb", "Mesh Proxy Service");
         attributes.put("00001829-0000-1000-8000-00805f9b34fb", "Reconnection Configuration");
 
-
-        // Sample Characteristics.
-        attributes.put(HEART_RATE_MEASUREMENT, "Heart Rate Measurement");
-        attributes.put("00002a29-0000-1000-8000-00805f9b34fb", "Manufacturer Name String");
-
-        attributes.put("00002a00-0000-1000-8000-00805f9b34fb", "Device Name");
-        attributes.put("00002a01-0000-1000-8000-00805f9b34fb", "Appearance");
-        attributes.put("00002a02-0000-1000-8000-00805f9b34fb", "Peripheral Privacy Flag");
-        attributes.put("00002a03-0000-1000-8000-00805f9b34fb", "Reconnection Address");
-        attributes.put("00002a04-0000-1000-8000-00805f9b34fb", "Manufacturer Name String");
-        attributes.put("00002a05-0000-1000-8000-00805f9b34fb", "Service Changed");
-        attributes.put("00002a06-0000-1000-8000-00805f9b34fb", "Alert level");
-
         attributes.put("00000077-0000-1000-8000-00805f9b34fb", "Authentication");
         attributes.put("00000088-0000-1000-8000-00805f9b34fb", "Light manage");
+
     }
 
     public static boolean contains(String uuid) {
@@ -79,4 +68,12 @@ public class AllGattServices {
         return name == null ? defaultName : name;
     }
 
+    public static String lookup(String name) {
+        for(Map.Entry<String, String> entry: attributes.entrySet()) {
+            if(entry.getValue() == name) {
+                return entry.getKey();
+            }
+        }
+        return "Unknown UUID";
+    }
 }

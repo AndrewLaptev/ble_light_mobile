@@ -1,19 +1,16 @@
 package com.example.scanner_1;
 
-import android.Manifest;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -21,7 +18,6 @@ import android.os.ParcelUuid;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 
 import java.util.List;
 import java.util.UUID;
@@ -57,9 +53,8 @@ public class BluetoothLeService extends Service {
     public final static String EXTRA_DATA =
             "scanner_1.EXTRA_DATA";
 
-    public final static String STR_MESH_PROXY_UUID = "00001828-0000-1000-8000-00805f9b34fb";
-    public final static UUID MESH_PROXY_UUID = UUID.fromString(STR_MESH_PROXY_UUID);
-    public final static ParcelUuid PARCEL_MESH_PROXY_UUID = ParcelUuid.fromString(STR_MESH_PROXY_UUID);
+    public final static String STR_FILTER_SERVICE_UUID = AllGattServices.lookup("Light manage");
+    public final static ParcelUuid PARCEL_FILTER_SERVICE_UUID = ParcelUuid.fromString(STR_FILTER_SERVICE_UUID);
     
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
@@ -288,14 +283,6 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-
-        // This is specific to BLE Mesh service
-        if (MESH_PROXY_UUID.equals(characteristic.getUuid())) {
-            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-                    MESH_PROXY_UUID);
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-            mBluetoothGatt.writeDescriptor(descriptor);
-        }
     }
 
     /**

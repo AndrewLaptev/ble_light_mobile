@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     ListAdapter adapterLeScanResult;
 
     private boolean mScanning;
-    private boolean meshFilter;
+    private boolean nodeFilter;
 
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         btnMeshFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                meshFilter = isChecked;
+                nodeFilter = isChecked;
             }
         });
 
@@ -258,9 +258,9 @@ public class MainActivity extends AppCompatActivity {
             }, SCAN_PERIOD);
 
             //scan specified devices only with ScanFilter
-            if (meshFilter) {
+            if (nodeFilter) {
                 ScanFilter scanFilter = new ScanFilter.Builder()
-                                .setServiceUuid(BluetoothLeService.PARCEL_MESH_PROXY_UUID)
+                                .setServiceUuid(BluetoothLeService.PARCEL_FILTER_SERVICE_UUID)
                                 .build();
                 List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
                 scanFilters.add(scanFilter);
