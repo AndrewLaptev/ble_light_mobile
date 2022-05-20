@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     SwitchCompat btnMeshFilter;
     ListView listViewLE;
 
-    List<BluetoothDevice> listBluetoothDevice;
+    List<BluetoothDeviceRSSI> listBluetoothDevice;
     ListAdapter adapterLeScanResult;
 
     private boolean mScanning;
@@ -57,7 +57,40 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final long SCAN_PERIOD = 5000;
+    private static final long SCAN_PERIOD = 15000;
+
+    class BluetoothDeviceRSSI {
+        private BluetoothDevice mBluetoothDevice;
+        private int RawRSSI;
+
+        public void setRawRSSI(int RawRSSI) {
+            this.RawRSSI = RawRSSI;
+        }
+
+        public int getRawRSSI() {
+            return RawRSSI;
+        }
+
+        public void setDevice(BluetoothDevice mBluetoothDevice) {
+            this.mBluetoothDevice = mBluetoothDevice;
+        }
+
+        public BluetoothDevice getDevice() {
+            return mBluetoothDevice;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof BluetoothDeviceRSSI)) {
+                return false;
+            }
+            BluetoothDeviceRSSI compDevice = (BluetoothDeviceRSSI) obj;
+            return compDevice.getDevice().equals(getDevice());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,20 +142,21 @@ public class MainActivity extends AppCompatActivity {
         listViewLE = (ListView) findViewById(R.id.lelist);
 
         listBluetoothDevice = new ArrayList<>();
-        adapterLeScanResult = new ArrayAdapter<BluetoothDevice>(
+        adapterLeScanResult = new ArrayAdapter<BluetoothDeviceRSSI>(
                 this, android.R.layout.simple_list_item_1, listBluetoothDevice) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView view = (TextView) super.getView(position, convertView, parent);
-                String deviceName, deviceAddress, textView;
+                String deviceName, deviceAddress, textView, rawRSSI;
 
-                deviceName = getItem(position).getName();
-                deviceAddress = getItem(position).getAddress();
+                deviceName = getItem(position).getDevice().getName();
+                deviceAddress = getItem(position).getDevice().getAddress();
+                rawRSSI = Integer.toString(getItem(position).getRawRSSI());
 
                 if(deviceName == null) {
-                    textView = deviceAddress;
+                    textView = deviceAddress + '\n' + rawRSSI;
                 }else{
-                    textView = deviceName + '\n' + deviceAddress;
+                    textView = deviceName + '\n' + deviceAddress + '\n' + rawRSSI;
                 }
                 view.setText(textView);
                 return view;
@@ -138,14 +172,14 @@ public class MainActivity extends AppCompatActivity {
             new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    final BluetoothDevice device = (BluetoothDevice) parent.getItemAtPosition(position);
+                    final BluetoothDeviceRSSI device = (BluetoothDeviceRSSI) parent.getItemAtPosition(position);
 
-                    String msg = device.getAddress() + "\n"
-                            + device.getBluetoothClass().toString() + "\n"
-                            + getBTDeviceType(device);
+                    String msg = device.getDevice().getAddress() + "\n"
+                            + device.getDevice().getBluetoothClass().toString() + "\n"
+                            + getBTDeviceType(device.getDevice());
 
                     new AlertDialog.Builder(MainActivity.this)
-                            .setTitle(device.getName())
+                            .setTitle(device.getDevice().getName())
                             .setMessage(msg)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
@@ -157,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
                                     final Intent intent = new Intent(MainActivity.this,
                                             ControlActivity.class);
                                     intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME,
-                                            device.getName());
+                                            device.getDevice().getName());
                                     intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS,
-                                            device.getAddress());
+                                            device.getDevice().getAddress());
 
                                     if (mScanning) {
                                         mBluetoothLeScanner.stopScan(scanCallback);
@@ -286,14 +320,20 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            addBluetoothDevice(result.getDevice());
+            BluetoothDeviceRSSI device = new BluetoothDeviceRSSI();
+            device.setDevice(result.getDevice());
+            device.setRawRSSI(result.getRssi());
+            addBluetoothDevice(device);
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
             super.onBatchScanResults(results);
             for(ScanResult result : results){
-                addBluetoothDevice(result.getDevice());
+                BluetoothDeviceRSSI device = new BluetoothDeviceRSSI();
+                device.setDevice(result.getDevice());
+                device.setRawRSSI(result.getRssi());
+                addBluetoothDevice(device);
             }
         }
 
@@ -305,11 +345,13 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
 
-        private void addBluetoothDevice(BluetoothDevice device){
+        private void addBluetoothDevice(BluetoothDeviceRSSI device){
             if(!listBluetoothDevice.contains(device)){
                 listBluetoothDevice.add(device);
                 listViewLE.invalidateViews();
                 ((BaseAdapter) listViewLE.getAdapter()).notifyDataSetChanged();
+            } else {
+                listBluetoothDevice.get(listBluetoothDevice.indexOf(device)).setRawRSSI(device.getRawRSSI());
             }
         }
     };
