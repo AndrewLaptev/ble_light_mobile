@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">scanner_1</string>
+    <string name="scan_btn_enable">SCAN</string>
+    <string name="scan_btn_disable">STOP</string>
+    <string name="ble_device_list">BLE devices list</string>
+    <string name="esp_light_node_filter">ESP_LIGHT filter</string>
+    <string name="esp_light_node_filter_ON">ON</string>
+    <string name="esp_light_node_filter_OFF">OFF</string>
 </resources>
