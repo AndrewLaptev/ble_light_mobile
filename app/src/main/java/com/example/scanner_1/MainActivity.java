@@ -194,7 +194,8 @@ public class MainActivity extends AppCompatActivity {
                                     if (mScanning) {
                                         mBluetoothLeScanner.stopScan(scanCallback);
                                         mScanning = false;
-                                        btnScan.setEnabled(true);
+                                        btnScan.setText(R.string.scan_btn_enable);
+                                        btnScan.setBackgroundColor(getColor(R.color.purple_500));
                                     }
                                     startActivity(intent);
                                 }
