@@ -20,9 +20,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,10 +43,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
-    private Handler mHandler;
 
     Button btnScan;
-    SwitchCompat btnMeshFilter;
+    SwitchCompat btnFilter;
     ListView listViewLE;
 
     List<BluetoothDeviceRSSI> listBluetoothDevice;
@@ -57,9 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final long SCAN_PERIOD = 15000;
 
-    class BluetoothDeviceRSSI {
+    static class BluetoothDeviceRSSI {
         private BluetoothDevice mBluetoothDevice;
         private int RawRSSI;
 
@@ -128,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                scanLeDevice(true);
+                scanLeDevice((String)btnScan.getText());
             }
         });
-        btnMeshFilter = (SwitchCompat) findViewById(R.id.switch_compat);
-        btnMeshFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnFilter = (SwitchCompat) findViewById(R.id.switch_compat);
+        btnFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 nodeFilter = isChecked;
@@ -164,8 +162,6 @@ public class MainActivity extends AppCompatActivity {
         };
         listViewLE.setAdapter(adapterLeScanResult);
         listViewLE.setOnItemClickListener(scanResultOnItemClickListener);
-
-        mHandler = new Handler();
     }
 
     AdapterView.OnItemClickListener scanResultOnItemClickListener =
@@ -270,26 +266,10 @@ public class MainActivity extends AppCompatActivity {
    Requires BLUETOOTH_ADMIN permission.
    Must hold ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission to get results.
     */
-    private void scanLeDevice(final boolean enable) {
-        if (enable) {
+    private void scanLeDevice(String btnState) {
+        if (btnState.equals(getString(R.string.scan_btn_enable))) {
             listBluetoothDevice.clear();
             listViewLE.invalidateViews();
-
-            // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mBluetoothLeScanner.stopScan(scanCallback);
-                    listViewLE.invalidateViews();
-
-                    Toast.makeText(MainActivity.this,
-                            "Scan timeout",
-                            Toast.LENGTH_LONG).show();
-
-                    mScanning = false;
-                    btnScan.setEnabled(true);
-                }
-            }, SCAN_PERIOD);
 
             //scan specified devices only with ScanFilter
             if (nodeFilter) {
@@ -308,11 +288,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             mScanning = true;
-            btnScan.setEnabled(false);
+            btnScan.setText(R.string.scan_btn_disable);
+            btnScan.setBackgroundColor(Color.RED);
         } else {
             mBluetoothLeScanner.stopScan(scanCallback);
             mScanning = false;
-            btnScan.setEnabled(true);
+            btnScan.setText(R.string.scan_btn_enable);
+            btnScan.setBackgroundColor(getColor(R.color.purple_500));
         }
     }
 
@@ -348,11 +330,11 @@ public class MainActivity extends AppCompatActivity {
         private void addBluetoothDevice(BluetoothDeviceRSSI device){
             if(!listBluetoothDevice.contains(device)){
                 listBluetoothDevice.add(device);
-                listViewLE.invalidateViews();
-                ((BaseAdapter) listViewLE.getAdapter()).notifyDataSetChanged();
             } else {
                 listBluetoothDevice.get(listBluetoothDevice.indexOf(device)).setRawRSSI(device.getRawRSSI());
             }
+            listViewLE.invalidateViews();
+            ((BaseAdapter) listViewLE.getAdapter()).notifyDataSetChanged();
         }
     };
 }
