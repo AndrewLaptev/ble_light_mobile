@@ -20,7 +20,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -36,6 +36,9 @@ public class BluetoothLeService extends Service {
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
+
+    private Map<String, BluetoothGatt> connectedDeviceMap;
+
     protected int mConnectionState = STATE_DISCONNECTED;
 
     private static final int STATE_DISCONNECTED = 0;
@@ -295,5 +298,7 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) return null;
         return mBluetoothGatt.getServices();
     }
+
+
 
 }

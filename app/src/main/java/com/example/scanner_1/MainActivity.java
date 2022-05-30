@@ -23,17 +23,18 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +46,15 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothLeScanner mBluetoothLeScanner;
 
     Button btnScan;
-    SwitchCompat btnFilter;
+    Button btnFilter;
+    Button btnMultConnect;
     ListView listViewLE;
 
     List<BluetoothDeviceRSSI> listBluetoothDevice;
     ListAdapter adapterLeScanResult;
 
     private boolean mScanning;
-    private boolean nodeFilter;
+    private boolean nodeFilter = false;
 
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
@@ -129,11 +131,19 @@ public class MainActivity extends AppCompatActivity {
                 scanLeDevice((String)btnScan.getText());
             }
         });
-        btnFilter = (SwitchCompat) findViewById(R.id.switch_compat);
-        btnFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnFilter = (ToggleButton) findViewById(R.id.toggle_filter);
+        btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                nodeFilter = isChecked;
+            public void onClick(View view) {
+                nodeFilter = !nodeFilter;
+            }
+        });
+        btnMultConnect = (Button) findViewById(R.id.mult_connect);
+        btnMultConnect.setEnabled(false);
+        btnMultConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // something multiple connection
             }
         });
 
@@ -150,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
                 deviceName = getItem(position).getDevice().getName();
                 deviceAddress = getItem(position).getDevice().getAddress();
                 rawRSSI = Integer.toString(getItem(position).getRawRSSI());
+
+                Log.i("TEST", deviceAddress + ' ' + rawRSSI);
 
                 if(deviceName == null) {
                     textView = deviceAddress + '\n' + rawRSSI;
@@ -307,6 +319,10 @@ public class MainActivity extends AppCompatActivity {
             device.setDevice(result.getDevice());
             device.setRawRSSI(result.getRssi());
             addBluetoothDevice(device);
+
+            if (!listBluetoothDevice.isEmpty()) {
+                btnMultConnect.setEnabled(nodeFilter);
+            }
         }
 
         @Override

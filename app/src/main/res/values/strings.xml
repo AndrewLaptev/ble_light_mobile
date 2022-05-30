@@ -3,7 +3,10 @@
     <string name="scan_btn_enable">SCAN</string>
     <string name="scan_btn_disable">STOP</string>
     <string name="ble_device_list">BLE devices list</string>
-    <string name="esp_light_node_filter">ESP_LIGHT filter</string>
-    <string name="esp_light_node_filter_ON">ON</string>
-    <string name="esp_light_node_filter_OFF">OFF</string>
+    <string name="esp_light_node_filter">Light node filter</string>
+    <string name="esp_light_node_filter_ON">Filter ON</string>
+    <string name="esp_light_node_filter_OFF">Filter OFF</string>
+    <string name="esp_multiple_connection">Multiple connect</string>
+    <string name="esp_multiple_connection_ON">ON</string>
+    <string name="esp_multiple_connection_OFF">OFF</string>
 </resources>
