@@ -65,7 +65,6 @@
         android:layout_height="70dp"
         android:layout_marginStart="4dp"
         android:text="@string/esp_light_node_filter"
-        android:textColor="#455A64"
         android:textOff="@string/esp_light_node_filter_OFF"
         android:textOn="@string/esp_light_node_filter_ON"
         app:layout_constraintBottom_toTopOf="@+id/scan"

@@ -19,6 +19,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class BluetoothLeService extends Service {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
 
-    private Map<String, BluetoothGatt> connectedDeviceMap;
+    private final Map<String, BluetoothGatt> connectedDeviceMap = new HashMap<String, BluetoothGatt>();
 
     protected int mConnectionState = STATE_DISCONNECTED;
 

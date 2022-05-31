@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scanner_1">
         <activity
+            android:name=".MultipleConnection"
+            android:exported="false" />
+        <activity
             android:name=".ControlActivity"
             android:exported="false" />
         <activity
