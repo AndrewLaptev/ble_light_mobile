@@ -19,9 +19,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -37,8 +36,7 @@ public class BluetoothLeService extends Service {
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
-
-    private final Map<String, BluetoothGatt> connectedDeviceMap = new HashMap<String, BluetoothGatt>();
+    private final List <BluetoothGatt> listBluetoothGatts = new ArrayList<BluetoothGatt>();
 
     protected int mConnectionState = STATE_DISCONNECTED;
 
@@ -196,7 +194,6 @@ public class BluetoothLeService extends Service {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
         }
-
         // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
@@ -217,6 +214,7 @@ public class BluetoothLeService extends Service {
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+        listBluetoothGatts.add(mBluetoothGatt);
         Log.d(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
@@ -243,11 +241,13 @@ public class BluetoothLeService extends Service {
      * released properly.
      */
     public void close() {
-        if (mBluetoothGatt == null) {
+        if (listBluetoothGatts.isEmpty()) {
             return;
         }
-        mBluetoothGatt.close();
-        mBluetoothGatt = null;
+        for(int i = 0; i < listBluetoothGatts.size(); i++) {
+            listBluetoothGatts.get(i).close();
+            listBluetoothGatts.set(i, null);
+        }
     }
 
     /**
@@ -259,19 +259,23 @@ public class BluetoothLeService extends Service {
      * @param characteristic The characteristic to read from.
      */
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+        if (mBluetoothAdapter == null || listBluetoothGatts.isEmpty()) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
         }
-        mBluetoothGatt.readCharacteristic(characteristic);
+        for (int i = 0; i < listBluetoothGatts.size(); i++) {
+            listBluetoothGatts.get(i).readCharacteristic(characteristic);
+        }
     }
 
     public void writeCharacteristic(BluetoothGattCharacteristic characteristic) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+        if (mBluetoothAdapter == null || listBluetoothGatts.isEmpty()) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
         }
-        mBluetoothGatt.writeCharacteristic(characteristic);
+        for (int i = 0; i < listBluetoothGatts.size(); i++) {
+            listBluetoothGatts.get(i).writeCharacteristic(characteristic);
+        }
     }
 
     /**
@@ -282,11 +286,13 @@ public class BluetoothLeService extends Service {
      */
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
                                               boolean enabled) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+        if (mBluetoothAdapter == null || listBluetoothGatts.isEmpty()) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
         }
-        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+        for (int i = 0; i < listBluetoothGatts.size(); i++) {
+            listBluetoothGatts.get(i).setCharacteristicNotification(characteristic, enabled);
+        }
     }
 
     /**
@@ -296,7 +302,7 @@ public class BluetoothLeService extends Service {
      * @return A {@code List} of supported services.
      */
     public List<BluetoothGattService> getSupportedGattServices() {
-        if (mBluetoothGatt == null) return null;
+        if (listBluetoothGatts.isEmpty()) return null;
         return mBluetoothGatt.getServices();
     }
 

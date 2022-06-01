@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate()
+@SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate() of MainActivity
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class ControlActivity extends AppCompatActivity {
     private final static String TAG = ControlActivity.class.getSimpleName();
@@ -63,6 +63,7 @@ public class ControlActivity extends AppCompatActivity {
             }
             // Automatically connects to the device upon successful start-up initialization.
             mBluetoothLeService.connect(mDeviceAddress);
+
         }
 
         @Override

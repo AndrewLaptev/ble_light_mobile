@@ -143,7 +143,15 @@ public class MainActivity extends AppCompatActivity {
         btnMultConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // something multiple connection
+                final Intent intent = new Intent(MainActivity.this,
+                        MultipleConnection.class);
+                if (mScanning) {
+                    mBluetoothLeScanner.stopScan(scanCallback);
+                    mScanning = false;
+                    btnScan.setText(R.string.scan_btn_enable);
+                    btnScan.setBackgroundColor(getColor(R.color.purple_500));
+                }
+                startActivity(intent);
             }
         });
 
