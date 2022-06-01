@@ -1,3 +1,4 @@
-# simple_ble_scanner
+# BLE-light-mobile
 
-This is another version on NordicSemiconductor libs
+This repository contain code for mobile app on Android. 
+This app manage light mode on smart lamps via this firmware on ESP32 controllers through Bluetooth Low Energy
