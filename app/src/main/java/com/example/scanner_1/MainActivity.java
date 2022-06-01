@@ -2,7 +2,6 @@ package com.example.scanner_1;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -23,7 +22,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,6 +150,17 @@ public class MainActivity extends AppCompatActivity {
                     btnScan.setText(R.string.scan_btn_enable);
                     btnScan.setBackgroundColor(getColor(R.color.purple_500));
                 }
+
+                ArrayList<String> listDeviceAddresses = new ArrayList<String>();
+
+                for (int i = 0; i < listBluetoothDevice.size(); i++) {
+                    listDeviceAddresses.add(listBluetoothDevice.get(i).getDevice().getAddress());
+                }
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Addresses", (Serializable)listDeviceAddresses);
+                intent.putExtra("BundleAddresses", bundle);
+
                 startActivity(intent);
             }
         });
@@ -168,8 +178,6 @@ public class MainActivity extends AppCompatActivity {
                 deviceName = getItem(position).getDevice().getName();
                 deviceAddress = getItem(position).getDevice().getAddress();
                 rawRSSI = Integer.toString(getItem(position).getRawRSSI());
-
-                Log.i("TEST", deviceAddress + ' ' + rawRSSI);
 
                 if(deviceName == null) {
                     textView = deviceAddress + '\n' + rawRSSI;

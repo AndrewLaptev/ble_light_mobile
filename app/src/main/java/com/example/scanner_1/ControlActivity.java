@@ -270,7 +270,7 @@ public class ControlActivity extends AppCompatActivity {
         textViewDeviceName.setText(mDeviceName);
         textViewDeviceAddr.setText(mDeviceAddress);
 
-        mGattServicesList = (ExpandableListView) findViewById(R.id.mult_gatt_devices);
+        mGattServicesList = (ExpandableListView) findViewById(R.id.gatt_services);
         mGattServicesList.setOnChildClickListener(servicesListClickListener);
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);

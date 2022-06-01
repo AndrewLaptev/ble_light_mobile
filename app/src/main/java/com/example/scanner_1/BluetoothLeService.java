@@ -221,6 +221,17 @@ public class BluetoothLeService extends Service {
         return true;
     }
 
+    public boolean multiconnect(final ArrayList<String> addresses) {
+        boolean err = false;
+        for (int i = 0; i < addresses.size(); i++) {
+            err = connect(addresses.get(i));
+            if (!err) {
+                return false;
+            }
+        }
+        return err;
+    }
+
     /**
      * Disconnects an existing connection or cancel a pending connection. The disconnection result
      * is reported asynchronously through the
