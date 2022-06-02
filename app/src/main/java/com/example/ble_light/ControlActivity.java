@@ -1,4 +1,4 @@
-package com.example.scanner_1;
+package com.example.ble_light;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -30,57 +30,48 @@ import java.util.List;
 
 @SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate() of MainActivity
 @RequiresApi(api = Build.VERSION_CODES.S)
-public class MultipleConnection extends AppCompatActivity {
+public class ControlActivity extends AppCompatActivity {
     private final static String TAG = ControlActivity.class.getSimpleName();
 
+    public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+
+    private String mDeviceName;
+    private String mDeviceAddress;
+
     private boolean mConnected = false;
-
-    private TextView textViewState;
-    private ExpandableListView mGattServicesList;
-    private int DEVICE_CONNECTIONS;
-
-    public ArrayList<String> listDevicesAddresses = new ArrayList<String>();
-
-    private ServiceConnection[] serviceConnections;
+    private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothLeService mBluetoothLeService;
 
-    private BluetoothGattCharacteristic mNotifyCharacteristic;
-    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
-            new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
+    TextView textViewState;
+    private ExpandableListView mGattServicesList;
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
 
-    private void multiConnect() {
-        DEVICE_CONNECTIONS = listDevicesAddresses.size();
-        serviceConnections = new ServiceConnection[DEVICE_CONNECTIONS];
+    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
+            new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
 
-        Context context = getApplicationContext();
-        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-        for (int i = 0; i < DEVICE_CONNECTIONS; i++) {
-            int finalI = i;
-            serviceConnections[i] = new ServiceConnection() {
-                private final int idx = finalI;
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.e(TAG, "Unable to init Bluetooth!");
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAddress);
 
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder binder) {
-                    mBluetoothLeService = ((BluetoothLeService.LocalBinder) binder).getService();
-                    if(!mBluetoothLeService.initialize()) {
-                        Log.e(TAG, "Unable to init Bluetooth!");
-                        finish();
-                    }
-                    // Automatically connects to the device upon successful start-up initialization.
-                    mBluetoothLeService.connect(listDevicesAddresses.get(idx));
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    mBluetoothLeService = null;
-                }
-            };
-            context.bindService(gattServiceIntent, serviceConnections[i],  Context.BIND_AUTO_CREATE);
         }
-    }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
+
 
     // Handles various events fired by the Service.
     // ACTION_GATT_CONNECTED: connected to a GATT server.
@@ -229,33 +220,33 @@ public class MultipleConnection extends AppCompatActivity {
                                 mNotifyCharacteristic = null;
                             }
                             mBluetoothLeService.readCharacteristic(characteristic);
-                            Toast.makeText(MultipleConnection.this,
+                            Toast.makeText(ControlActivity.this,
                                     "Readable!",
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
                             mBluetoothLeService.setCharacteristicNotification(mNotifyCharacteristic, true);
-                            Toast.makeText(MultipleConnection.this,
+                            Toast.makeText(ControlActivity.this,
                                     "Notify!",
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) {
-                            Toast.makeText(MultipleConnection.this,
+                            Toast.makeText(ControlActivity.this,
                                     "Writable!",
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_BROADCAST) == 0) {
-                            Toast.makeText(MultipleConnection.this,
+                            Toast.makeText(ControlActivity.this,
                                     "Broadcast!",
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_INDICATE) == 0) {
-                            Toast.makeText(MultipleConnection.this,
+                            Toast.makeText(ControlActivity.this,
                                     "Indicate!",
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE - BluetoothGattCharacteristic.PROPERTY_READ
-                                - BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
-                            Toast.makeText(MultipleConnection.this,
+                        - BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
+                            Toast.makeText(ControlActivity.this,
                                     "Read, Write and Notify!",
                                     Toast.LENGTH_SHORT).show();
 
-                            showSentDialog(MultipleConnection.this, characteristic);
+                            showSentDialog(ControlActivity.this, characteristic);
                         }
                         return true;
                     }
@@ -266,18 +257,24 @@ public class MultipleConnection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multiple_connection);
+        setContentView(R.layout.activity_control);
 
-        Intent intent = getIntent();
-        Bundle serAddresses = intent.getBundleExtra("BundleAddresses");
-        listDevicesAddresses = (ArrayList<String>) serAddresses.getSerializable("Addresses");
+        final Intent intent = getIntent();
+        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
+        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
-        textViewState = (TextView)findViewById(R.id.multi_gatt_state);
+        TextView textViewDeviceName = (TextView)findViewById(R.id.textDeviceName);
+        TextView textViewDeviceAddr = (TextView)findViewById(R.id.textDeviceAddress);
+        textViewState = (TextView)findViewById(R.id.textState);
 
-        mGattServicesList = (ExpandableListView) findViewById(R.id.multi_gatt_services);
+        textViewDeviceName.setText(mDeviceName);
+        textViewDeviceAddr.setText(mDeviceAddress);
+
+        mGattServicesList = (ExpandableListView) findViewById(R.id.gatt_services);
         mGattServicesList.setOnChildClickListener(servicesListClickListener);
 
-        multiConnect();
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -285,7 +282,7 @@ public class MultipleConnection extends AppCompatActivity {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.multiconnect(listDevicesAddresses);
+            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
     }
@@ -299,12 +296,8 @@ public class MultipleConnection extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Context context = getApplicationContext();
-
-        for (int i = 0; i < DEVICE_CONNECTIONS; i++) {
-            context.unbindService(serviceConnections[i]);
-            mBluetoothLeService = null;
-        }
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {

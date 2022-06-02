@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.scanner_1">
+    package="com.example.ble_light">
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -20,13 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scanner_1">
         <activity
-            android:name=".MultipleConnection"
+            android:name="com.example.ble_light.MultipleConnection"
             android:exported="false" />
         <activity
-            android:name=".ControlActivity"
+            android:name="com.example.ble_light.ControlActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.ble_light.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,7 @@
         </activity>
 
         <service
-            android:name=".BluetoothLeService"
+            android:name="com.example.ble_light.BluetoothLeService"
             android:enabled="true" />
     </application>
 

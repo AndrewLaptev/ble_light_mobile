@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">scanner_1</string>
+    <string name="app_name">BLE light</string>
     <string name="scan_btn_enable">SCAN</string>
     <string name="scan_btn_disable">STOP</string>
     <string name="ble_device_list">BLE devices list</string>

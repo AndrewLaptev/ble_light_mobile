@@ -1,4 +1,4 @@
-package com.example.scanner_1;
+package com.example.ble_light;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnScan;
     Button btnFilter;
-    Button btnMultConnect;
+    Button btnMultiConnect;
     ListView listViewLE;
 
     List<BluetoothDeviceRSSI> listBluetoothDevice;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
 
-    static class BluetoothDeviceRSSI {
+    public class BluetoothDeviceRSSI {
         private BluetoothDevice mBluetoothDevice;
         private int RawRSSI;
 
@@ -137,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
                 nodeFilter = !nodeFilter;
             }
         });
-        btnMultConnect = (Button) findViewById(R.id.mult_connect);
-        btnMultConnect.setEnabled(false);
-        btnMultConnect.setOnClickListener(new View.OnClickListener() {
+        btnMultiConnect = (Button) findViewById(R.id.mult_connect);
+        btnMultiConnect.setEnabled(false);
+        btnMultiConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Intent intent = new Intent(MainActivity.this,
@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
             addBluetoothDevice(device);
 
             if (!listBluetoothDevice.isEmpty()) {
-                btnMultConnect.setEnabled(nodeFilter);
+                btnMultiConnect.setEnabled(nodeFilter);
             }
         }
 

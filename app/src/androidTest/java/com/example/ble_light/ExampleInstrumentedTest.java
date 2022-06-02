@@ -1,4 +1,4 @@
-package com.example.scanner_1;
+package com.example.ble_light;
 
 import android.content.Context;
 
