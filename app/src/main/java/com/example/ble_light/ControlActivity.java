@@ -230,8 +230,14 @@ public class ControlActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) {
                             Toast.makeText(ControlActivity.this,
+                                    "Writable no response!",
+                                    Toast.LENGTH_SHORT).show();
+                            showSentDialog(ControlActivity.this, characteristic);
+                        } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE) == 0) {
+                            Toast.makeText(ControlActivity.this,
                                     "Writable!",
                                     Toast.LENGTH_SHORT).show();
+                            showSentDialog(ControlActivity.this, characteristic);
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_BROADCAST) == 0) {
                             Toast.makeText(ControlActivity.this,
                                     "Broadcast!",
