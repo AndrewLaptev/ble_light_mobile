@@ -239,8 +239,14 @@ public class MultipleConnection extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) {
                             Toast.makeText(MultipleConnection.this,
+                                    "Writable no response!",
+                                    Toast.LENGTH_SHORT).show();
+                            showSentDialog(MultipleConnection.this, characteristic);
+                        } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_WRITE) == 0) {
+                            Toast.makeText(MultipleConnection.this,
                                     "Writable!",
                                     Toast.LENGTH_SHORT).show();
+                            showSentDialog(MultipleConnection.this, characteristic);
                         } else if ((charaProp - BluetoothGattCharacteristic.PROPERTY_BROADCAST) == 0) {
                             Toast.makeText(MultipleConnection.this,
                                     "Broadcast!",
@@ -254,7 +260,6 @@ public class MultipleConnection extends AppCompatActivity {
                             Toast.makeText(MultipleConnection.this,
                                     "Read, Write and Notify!",
                                     Toast.LENGTH_SHORT).show();
-
                             showSentDialog(MultipleConnection.this, characteristic);
                         }
                         return true;
