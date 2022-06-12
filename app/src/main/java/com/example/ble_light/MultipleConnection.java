@@ -34,8 +34,6 @@ import java.util.List;
 public class MultipleConnection extends AppCompatActivity {
     private final static String TAG = ControlActivity.class.getSimpleName();
 
-    public boolean mConnected = false;
-
     private TextView textViewState;
 
     public ArrayList<String> listDevicesAddresses = new ArrayList<String>();
@@ -85,10 +83,8 @@ public class MultipleConnection extends AppCompatActivity {
         public void onReceive(Context context, @NonNull Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                mConnected = true;
                 updateConnectionState("GATT_CONNECTED");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
                 updateConnectionState("GATT_DISCONNECTED");
                 clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {

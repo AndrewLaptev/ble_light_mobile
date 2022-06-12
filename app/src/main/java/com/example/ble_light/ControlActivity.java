@@ -39,7 +39,6 @@ public class ControlActivity extends AppCompatActivity {
     private String mDeviceName;
     private String mDeviceAddress;
 
-    private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothLeService mBluetoothLeService;
 
@@ -84,10 +83,8 @@ public class ControlActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                mConnected = true;
                 updateConnectionState("GATT_CONNECTED");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
                 updateConnectionState("GATT_DISCONNECTED");
                 clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
