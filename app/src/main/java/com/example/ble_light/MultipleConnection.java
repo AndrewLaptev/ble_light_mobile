@@ -1,5 +1,6 @@
 package com.example.ble_light;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +37,6 @@ public class MultipleConnection extends AppCompatActivity {
     public boolean mConnected = false;
 
     private TextView textViewState;
-    private ExpandableListView mGattServicesList;
     private int DEVICE_CONNECTIONS;
 
     public ArrayList<String> listDevicesAddresses = new ArrayList<String>();
@@ -45,7 +45,8 @@ public class MultipleConnection extends AppCompatActivity {
     private BluetoothLeService mBluetoothLeService;
 
     private BluetoothGattCharacteristic mNotifyCharacteristic;
-    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
+    private ExpandableListView listGattService;
+    private ArrayList<ArrayList<BluetoothGattCharacteristic>> listGattCharacteristic =
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
 
     private final String LIST_NAME = "NAME";
@@ -90,7 +91,7 @@ public class MultipleConnection extends AppCompatActivity {
     //                        or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, @NonNull Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
@@ -109,7 +110,7 @@ public class MultipleConnection extends AppCompatActivity {
     };
 
     private void clearUI() {
-        mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
+        listGattService.setAdapter((SimpleExpandableListAdapter) null);
     }
 
     private void updateConnectionState(final String st) {
@@ -139,7 +140,7 @@ public class MultipleConnection extends AppCompatActivity {
                 new ArrayList<HashMap<String, String>>();
         ArrayList<ArrayList<HashMap<String, String>>> gattCharacteristicData =
                 new ArrayList<ArrayList<HashMap<String, String>>>();
-        mGattCharacteristics = new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
+        listGattCharacteristic = new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
 
         // Loops through available GATT Services.
         for (BluetoothGattService gattService : gattServices) {
@@ -169,7 +170,7 @@ public class MultipleConnection extends AppCompatActivity {
                 currentCharaData.put(LIST_UUID, uuid);
                 gattCharacteristicGroupData.add(currentCharaData);
             }
-            mGattCharacteristics.add(charas);
+            listGattCharacteristic.add(charas);
             gattCharacteristicData.add(gattCharacteristicGroupData);
         }
 
@@ -184,7 +185,7 @@ public class MultipleConnection extends AppCompatActivity {
                 new String[] {LIST_NAME, LIST_UUID},
                 new int[] {android.R.id.text1, android.R.id.text2}
         );
-        mGattServicesList.setAdapter(gattServiceAdapter);
+        listGattService.setAdapter(gattServiceAdapter);
     }
 
     private void showSentDialog(Context c, BluetoothGattCharacteristic characteristic) {
@@ -215,9 +216,9 @@ public class MultipleConnection extends AppCompatActivity {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                             int childPosition, long id) {
-                    if (mGattCharacteristics != null) {
+                    if (listGattCharacteristic != null) {
                         final BluetoothGattCharacteristic characteristic =
-                                mGattCharacteristics.get(groupPosition).get(childPosition);
+                                listGattCharacteristic.get(groupPosition).get(childPosition);
                         final int charaProp = characteristic.getProperties();
 
                         if ((charaProp - BluetoothGattCharacteristic.PROPERTY_READ) == 0) {
@@ -280,8 +281,8 @@ public class MultipleConnection extends AppCompatActivity {
 
         textViewState = (TextView)findViewById(R.id.multi_gatt_state);
 
-        mGattServicesList = (ExpandableListView) findViewById(R.id.multi_gatt_services);
-        mGattServicesList.setOnChildClickListener(servicesListClickListener);
+        listGattService = (ExpandableListView) findViewById(R.id.multi_gatt_services);
+        listGattService.setOnChildClickListener(servicesListClickListener);
 
         multiConnect();
     }
@@ -324,9 +325,4 @@ public class MultipleConnection extends AppCompatActivity {
     }
 
     private static HashMap<String, String> attributes = new HashMap();
-
-    public static String lookup(String uuid, String defaultName) {
-        String name = attributes.get(uuid);
-        return name == null ? defaultName : name;
-    }
 }
