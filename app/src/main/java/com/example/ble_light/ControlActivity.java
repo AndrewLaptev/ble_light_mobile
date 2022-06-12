@@ -303,6 +303,7 @@ public class ControlActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbindService(mServiceConnection);
+        mBluetoothLeService.disconnect();
         mBluetoothLeService = null;
     }
 
