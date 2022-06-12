@@ -37,11 +37,10 @@ public class MultipleConnection extends AppCompatActivity {
     public boolean mConnected = false;
 
     private TextView textViewState;
-    private int DEVICE_CONNECTIONS;
 
     public ArrayList<String> listDevicesAddresses = new ArrayList<String>();
 
-    private ServiceConnection[] serviceConnections;
+    private ServiceConnection serviceConnection;
     private BluetoothLeService mBluetoothLeService;
 
     private BluetoothGattCharacteristic mNotifyCharacteristic;
@@ -52,35 +51,27 @@ public class MultipleConnection extends AppCompatActivity {
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
 
-    private void multiConnect() {
-        DEVICE_CONNECTIONS = listDevicesAddresses.size();
-        serviceConnections = new ServiceConnection[DEVICE_CONNECTIONS];
-
+    private void initServiceConnection() {
         Context context = getApplicationContext();
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-        for (int i = 0; i < DEVICE_CONNECTIONS; i++) {
-            int finalI = i;
-            serviceConnections[i] = new ServiceConnection() {
-                private final int idx = finalI;
-
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder binder) {
-                    mBluetoothLeService = ((BluetoothLeService.LocalBinder) binder).getService();
-                    if(!mBluetoothLeService.initialize()) {
-                        Log.e(TAG, "Unable to init Bluetooth!");
-                        finish();
-                    }
-                    // Automatically connects to the device upon successful start-up initialization.
-                    mBluetoothLeService.connect(listDevicesAddresses.get(idx));
+        serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder binder) {
+                mBluetoothLeService = ((BluetoothLeService.LocalBinder) binder).getService();
+                if(!mBluetoothLeService.initialize()) {
+                    Log.e(TAG, "Unable to init Bluetooth!");
+                    finish();
                 }
+                // Automatically connects to the device upon successful start-up initialization.
+                mBluetoothLeService.multiconnect(listDevicesAddresses);
+            }
 
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    mBluetoothLeService = null;
-                }
-            };
-            context.bindService(gattServiceIntent, serviceConnections[i],  Context.BIND_AUTO_CREATE);
-        }
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mBluetoothLeService = null;
+            }
+        };
+        context.bindService(gattServiceIntent, serviceConnection,  Context.BIND_AUTO_CREATE);
     }
 
     // Handles various events fired by the Service.
@@ -284,7 +275,7 @@ public class MultipleConnection extends AppCompatActivity {
         listGattService = (ExpandableListView) findViewById(R.id.multi_gatt_services);
         listGattService.setOnChildClickListener(servicesListClickListener);
 
-        multiConnect();
+        initServiceConnection();
     }
 
     @Override
@@ -308,9 +299,7 @@ public class MultipleConnection extends AppCompatActivity {
         super.onDestroy();
         Context context = getApplicationContext();
 
-        for (int i = 0; i < DEVICE_CONNECTIONS; i++) {
-            context.unbindService(serviceConnections[i]);
-        }
+        context.unbindService(serviceConnection);
         mBluetoothLeService.disconnect();
         mBluetoothLeService = null;
     }
