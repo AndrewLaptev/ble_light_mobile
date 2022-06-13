@@ -19,7 +19,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.BLE_light">
-
+        <activity
+            android:name=".LightManageActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

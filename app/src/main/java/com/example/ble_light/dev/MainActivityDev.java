@@ -59,7 +59,6 @@ public class MainActivityDev extends AppCompatActivity {
     private boolean nodeFilter = false;
 
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
-    private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
 
     public class BluetoothDeviceRSSI {
         private BluetoothDevice mBluetoothDevice;
@@ -98,23 +97,6 @@ public class MainActivityDev extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dev);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.BLUETOOTH_CONNECT,
-                    Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, ACCESS_BLUETOOTH_PERMISSION);
-        }
-
-        // Check if BLE is supported on the device
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this,
-                    "BLE not supported in this device!", Toast.LENGTH_SHORT).show();
-            finish();
-        }
 
         getBluetoothAdapterAndLeScanner();
 
