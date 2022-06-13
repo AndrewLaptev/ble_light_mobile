@@ -18,17 +18,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Scanner_1">
+        android:theme="@style/Theme.BLE_light">
         <activity
-            android:name="com.example.ble_light.dev.MultiConnectionActivityDev"
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dev.MultiConnectionActivityDev"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.example.ble_light.dev.ConnectionActivityDev"
+            android:name=".dev.ConnectionActivityDev"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.example.ble_light.dev.MainActivityDev"
+            android:name=".dev.MainActivityDev"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -39,7 +42,7 @@
         </activity>
 
         <service
-            android:name="com.example.ble_light.BluetoothLeService"
+            android:name=".BluetoothLeService"
             android:enabled="true" />
     </application>
 
