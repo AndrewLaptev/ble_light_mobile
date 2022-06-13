@@ -1,4 +1,4 @@
-package com.example.ble_light;
+package com.example.ble_light.dev;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,13 +34,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.ble_light.BluetoothLeService;
+import com.example.ble_light.R;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate()
 @RequiresApi(api = Build.VERSION_CODES.S)
-public class MainActivity extends AppCompatActivity {
+public class MainActivityDev extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
 
@@ -142,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
         btnMultiConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent intent = new Intent(MainActivity.this,
-                        MultipleConnection.class);
+                final Intent intent = new Intent(MainActivityDev.this,
+                        MultiConnectionActivityDev.class);
                 if (mScanning) {
                     mBluetoothLeScanner.stopScan(scanCallback);
                     mScanning = false;
@@ -202,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                             + device.getDevice().getBluetoothClass().toString() + "\n"
                             + getBTDeviceType(device.getDevice());
 
-                    new AlertDialog.Builder(MainActivity.this)
+                    new AlertDialog.Builder(MainActivityDev.this)
                             .setTitle(device.getDevice().getName())
                             .setMessage(msg)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -212,11 +215,11 @@ public class MainActivity extends AppCompatActivity {
                             .setNeutralButton("CONNECT", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    final Intent intent = new Intent(MainActivity.this,
-                                            ControlActivity.class);
-                                    intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME,
+                                    final Intent intent = new Intent(MainActivityDev.this,
+                                            ConnectionActivityDev.class);
+                                    intent.putExtra(ConnectionActivityDev.EXTRAS_DEVICE_NAME,
                                             device.getDevice().getName());
-                                    intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS,
+                                    intent.putExtra(ConnectionActivityDev.EXTRAS_DEVICE_ADDRESS,
                                             device.getDevice().getAddress());
 
                                     if (mScanning) {
@@ -355,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onScanFailed(int errorCode) {
             super.onScanFailed(errorCode);
-            Toast.makeText(MainActivity.this,
+            Toast.makeText(MainActivityDev.this,
                     "onScanFailed: " + String.valueOf(errorCode),
                     Toast.LENGTH_LONG).show();
         }

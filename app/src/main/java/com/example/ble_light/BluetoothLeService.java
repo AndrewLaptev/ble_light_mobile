@@ -19,6 +19,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.ble_light.gatt_attr.AllGattServices;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -186,7 +188,7 @@ public class BluetoothLeService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        BluetoothLeService getService() {
+        public BluetoothLeService getService() {
             return BluetoothLeService.this;
         }
     }

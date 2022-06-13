@@ -20,15 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scanner_1">
         <activity
-            android:name="com.example.ble_light.MultipleConnection"
+            android:name="com.example.ble_light.dev.MultiConnectionActivityDev"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.ble_light.ControlActivity"
+            android:name="com.example.ble_light.dev.ConnectionActivityDev"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.ble_light.MainActivity"
+            android:name="com.example.ble_light.dev.MainActivityDev"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

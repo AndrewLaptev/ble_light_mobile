@@ -1,4 +1,4 @@
-package com.example.ble_light;
+package com.example.ble_light.gatt_attr;
 
 import java.util.HashMap;
 import java.util.UUID;
