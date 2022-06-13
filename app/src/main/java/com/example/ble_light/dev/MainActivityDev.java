@@ -44,6 +44,8 @@ import java.util.List;
 @SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate()
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivityDev extends AppCompatActivity {
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
+
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
 
@@ -52,15 +54,13 @@ public class MainActivityDev extends AppCompatActivity {
     Button btnMultiConnect;
     ListView listViewLE;
 
-    List<BluetoothDeviceRSSI> listBluetoothDevice;
+    List<BluetoothDeviceExt> listBluetoothDevice;
     ListAdapter adapterLeScanResult;
 
     private boolean mScanning;
     private boolean nodeFilter = false;
 
-    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
-
-    public class BluetoothDeviceRSSI {
+    public static class BluetoothDeviceExt {
         private BluetoothDevice mBluetoothDevice;
         private int RawRSSI;
 
@@ -85,10 +85,10 @@ public class MainActivityDev extends AppCompatActivity {
             if (obj == this) {
                 return true;
             }
-            if (!(obj instanceof BluetoothDeviceRSSI)) {
+            if (!(obj instanceof BluetoothDeviceExt)) {
                 return false;
             }
-            BluetoothDeviceRSSI compDevice = (BluetoothDeviceRSSI) obj;
+            BluetoothDeviceExt compDevice = (BluetoothDeviceExt) obj;
             return compDevice.getDevice().equals(getDevice());
         }
     }
@@ -153,7 +153,7 @@ public class MainActivityDev extends AppCompatActivity {
         listViewLE = (ListView) findViewById(R.id.lelist);
 
         listBluetoothDevice = new ArrayList<>();
-        adapterLeScanResult = new ArrayAdapter<BluetoothDeviceRSSI>(
+        adapterLeScanResult = new ArrayAdapter<BluetoothDeviceExt>(
                 this, android.R.layout.simple_list_item_1, listBluetoothDevice) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -181,7 +181,7 @@ public class MainActivityDev extends AppCompatActivity {
             new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    final BluetoothDeviceRSSI device = (BluetoothDeviceRSSI) parent.getItemAtPosition(position);
+                    final BluetoothDeviceExt device = (BluetoothDeviceExt) parent.getItemAtPosition(position);
 
                     String msg = device.getDevice().getAddress() + "\n"
                             + device.getDevice().getBluetoothClass().toString() + "\n"
@@ -316,7 +316,7 @@ public class MainActivityDev extends AppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            BluetoothDeviceRSSI device = new BluetoothDeviceRSSI();
+            BluetoothDeviceExt device = new BluetoothDeviceExt();
             device.setDevice(result.getDevice());
             device.setRawRSSI(result.getRssi());
             addBluetoothDevice(device);
@@ -330,7 +330,7 @@ public class MainActivityDev extends AppCompatActivity {
         public void onBatchScanResults(List<ScanResult> results) {
             super.onBatchScanResults(results);
             for(ScanResult result : results){
-                BluetoothDeviceRSSI device = new BluetoothDeviceRSSI();
+                BluetoothDeviceExt device = new BluetoothDeviceExt();
                 device.setDevice(result.getDevice());
                 device.setRawRSSI(result.getRssi());
                 addBluetoothDevice(device);
@@ -345,7 +345,7 @@ public class MainActivityDev extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
 
-        private void addBluetoothDevice(BluetoothDeviceRSSI device){
+        private void addBluetoothDevice(BluetoothDeviceExt device){
             if(!listBluetoothDevice.contains(device)){
                 listBluetoothDevice.add(device);
             } else {
