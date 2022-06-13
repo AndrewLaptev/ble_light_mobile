@@ -274,7 +274,7 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multiple_connection);
+        setContentView(R.layout.activity_multiconnection_dev);
 
         Intent intent = getIntent();
         Bundle serAddresses = intent.getBundleExtra("BundleAddresses");
