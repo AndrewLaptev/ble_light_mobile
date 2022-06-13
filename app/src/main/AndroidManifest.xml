@@ -19,9 +19,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.BLE_light">
+
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".dev.MultiConnectionActivityDev"
             android:exported="false"
@@ -32,14 +40,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".dev.MainActivityDev"
-            android:exported="true"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".BluetoothLeService"

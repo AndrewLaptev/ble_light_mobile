@@ -9,4 +9,5 @@
     <string name="esp_multiple_connection">Multiple connect</string>
     <string name="esp_multiple_connection_ON">ON</string>
     <string name="esp_multiple_connection_OFF">OFF</string>
+    <string name="activity_main_menu_dev_item">Developer mode</string>
 </resources>
