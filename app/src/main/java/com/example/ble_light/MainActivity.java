@@ -7,19 +7,46 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import com.example.ble_light.dev.MainActivityDev;
 import com.example.ble_light.dev.MultiConnectionActivityDev;
 
 public class MainActivity extends AppCompatActivity {
+    private ImageButton btnStartScan;
+    private ProgressBar scanProgressBar;
+    private boolean scanState = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        scanProgressBar = findViewById(R.id.progressBar);
+        scanProgressBar.setVisibility(View.INVISIBLE);
+
+        btnStartScan = (ImageButton) findViewById(R.id.start_scan_button);
+        btnStartScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanState = !scanState;
+                if (scanState) {
+                    btnStartScan.setImageAlpha(75);
+                    scanProgressBar.setVisibility(View.VISIBLE);
+                } else {
+                    btnStartScan.setImageAlpha(255);
+                    scanProgressBar.setVisibility(View.INVISIBLE);
+                }
+//                btnStartScan.setEnabled(scanState);
+            }
+        });
     }
 
     @Override
