@@ -35,6 +35,7 @@ public class ControlActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final int SUM_TRY_RECONNECTIONS = 10;
 
     private String mDeviceName;
     private String mDeviceAddress;
@@ -61,8 +62,15 @@ public class ControlActivity extends AppCompatActivity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAddress);
-
+            boolean err_connection = mBluetoothLeService.connect(mDeviceAddress);
+            int counter_connection = 0;
+            if(!err_connection) {
+                while(!err_connection && counter_connection != SUM_TRY_RECONNECTIONS) {
+                    Log.i(TAG, "Reconnection to device");
+                    err_connection = mBluetoothLeService.connect(mDeviceAddress);
+                    counter_connection++;
+                }
+            }
         }
 
         @Override
@@ -284,10 +292,6 @@ public class ControlActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
-        }
     }
 
     @Override

@@ -57,9 +57,11 @@ public class BluetoothLeService extends Service {
     public final static ParcelUuid PARCEL_FILTER_SERVICE_UUID = ParcelUuid.fromString(STR_FILTER_SERVICE_UUID);
 
     public class BluetoothGattExt {
+        private final int SUM_TRY_GATT_RECONNECTIONS = 10;
         private BluetoothGatt mBluetoothGatt;
         private String mBluetoothDeviceAddress;
         private int mConnectionState = STATE_DISCONNECTED;
+        private boolean disconnectApprove = false;
         private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -73,10 +75,20 @@ public class BluetoothLeService extends Service {
                     Log.i(TAG, "Attempting to start service discovery:" +
                             mBluetoothGatt.discoverServices());
                 }else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                    intentAction = ACTION_GATT_DISCONNECTED;
-                    mConnectionState = STATE_DISCONNECTED;
-                    Log.i(TAG, "Disconnected from GATT server.");
-                    broadcastUpdate(intentAction);
+                    if (disconnectApprove) {
+                        intentAction = ACTION_GATT_DISCONNECTED;
+                        mConnectionState = STATE_DISCONNECTED;
+                        Log.i(TAG, "Disconnected from GATT server.");
+                        broadcastUpdate(intentAction);
+                    } else {
+                        int count_reconnections = 0;
+                        boolean reconnect_result = false;
+                        while(!reconnect_result && count_reconnections != SUM_TRY_GATT_RECONNECTIONS) {
+                            Log.i(TAG, "Reconnection to GATT server");
+                            reconnect_result = gatt.connect();
+                            count_reconnections++;
+                        }
+                    }
                 }
             }
 
@@ -93,7 +105,6 @@ public class BluetoothLeService extends Service {
             public void onCharacteristicRead(BluetoothGatt gatt,
                                              BluetoothGattCharacteristic characteristic, int status) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
-                    Log.i("TEST_READ_CB_ADDRESS", gatt.getDevice().getAddress());
                     broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
                 }
             }
@@ -129,6 +140,10 @@ public class BluetoothLeService extends Service {
             return mGattCallback;
         }
 
+        public boolean getDisconnectApprove() {
+            return disconnectApprove;
+        }
+
         public void setBluetoothGatt(BluetoothGatt gatt) {
             mBluetoothGatt = gatt;
         }
@@ -139,6 +154,10 @@ public class BluetoothLeService extends Service {
 
         public void setConnectionState(int state) {
             mConnectionState = state;
+        }
+
+        public void setDisconnectApprove(boolean approve) {
+            disconnectApprove = approve;
         }
     }
 
@@ -279,6 +298,7 @@ public class BluetoothLeService extends Service {
         }
         for (BluetoothGattExt gatt : listBluetoothGattsExt) {
             gatt.getBluetoothGatt().disconnect();
+            gatt.setDisconnectApprove(true);
         }
     }
 

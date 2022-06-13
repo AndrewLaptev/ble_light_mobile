@@ -34,6 +34,8 @@ import java.util.List;
 public class MultipleConnection extends AppCompatActivity {
     private final static String TAG = ControlActivity.class.getSimpleName();
 
+    public static final int SUM_TRY_RECONNECTIONS = 10;
+
     private TextView textViewState;
 
     public ArrayList<String> listDevicesAddresses = new ArrayList<String>();
@@ -61,7 +63,15 @@ public class MultipleConnection extends AppCompatActivity {
                     finish();
                 }
                 // Automatically connects to the device upon successful start-up initialization.
-                mBluetoothLeService.multiconnect(listDevicesAddresses);
+                boolean err_connection = mBluetoothLeService.multiconnect(listDevicesAddresses);
+                int counter_connection = 0;
+                if(!err_connection) {
+                    while(!err_connection && counter_connection != SUM_TRY_RECONNECTIONS) {
+                        Log.i(TAG, "Reconnection to devices");
+                        err_connection = mBluetoothLeService.multiconnect(listDevicesAddresses);
+                        counter_connection++;
+                    }
+                }
             }
 
             @Override
@@ -264,7 +274,6 @@ public class MultipleConnection extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle serAddresses = intent.getBundleExtra("BundleAddresses");
         listDevicesAddresses = (ArrayList<String>) serAddresses.getSerializable("Addresses");
-        Log.i("TEST", listDevicesAddresses.toString());
 
         textViewState = (TextView)findViewById(R.id.multi_gatt_state);
 
@@ -278,10 +287,6 @@ public class MultipleConnection extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.multiconnect(listDevicesAddresses);
-            Log.d(TAG, "Connect request result=" + result);
-        }
     }
 
     @Override
