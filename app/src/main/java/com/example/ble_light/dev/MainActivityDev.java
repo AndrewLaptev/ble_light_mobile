@@ -2,9 +2,7 @@ package com.example.ble_light.dev;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -18,7 +16,6 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -138,8 +135,8 @@ public class MainActivityDev extends AppCompatActivity {
 
                 ArrayList<String> listDeviceAddresses = new ArrayList<String>();
 
-                for (int i = 0; i < listBluetoothDevice.size(); i++) {
-                    listDeviceAddresses.add(listBluetoothDevice.get(i).getDevice().getAddress());
+                for (BluetoothDeviceExt device : listBluetoothDevice) {
+                    listDeviceAddresses.add(device.getDevice().getAddress());
                 }
 
                 Bundle bundle = new Bundle();

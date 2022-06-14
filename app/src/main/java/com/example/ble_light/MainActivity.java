@@ -19,7 +19,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.ble_light.dev.MainActivityDev;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +39,11 @@ public class MainActivity extends MainActivityDev {
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
     private static final int SCAN_PERIOD = 4000;
 
+    private final Handler mHandler = new Handler();
+
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     List<BluetoothDeviceExt> listBluetoothDevice;
-    private Handler mHandler;
 
     private ImageButton btnStartScan;
     private ProgressBar scanProgressBar;
@@ -54,7 +55,6 @@ public class MainActivity extends MainActivityDev {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mHandler = new Handler();
         listBluetoothDevice = new ArrayList<>();
         getBluetoothAdapterAndLeScanner();
 
@@ -122,14 +122,23 @@ public class MainActivity extends MainActivityDev {
                 public void run() {
                     if(scanState) {
                         mBluetoothLeScanner.stopScan(scanCallback);
+
                         btnStartScan.setImageAlpha(255);
                         scanProgressBar.setVisibility(View.INVISIBLE);
                         scanState = !scanState;
-                        final Intent intent = new Intent(MainActivity.this, LightManageActivity.class);
-                        startActivity(intent);
+
+                        final Intent intent = new Intent(MainActivity.this,
+                                LightManageActivity.class);
+
+                        ArrayList<String> listDeviceAddresses = new ArrayList<String>();
                         for (BluetoothDeviceExt device : listBluetoothDevice) {
-                            Log.i("TEST", device.getDevice().getAddress());
+                            listDeviceAddresses.add(device.getDevice().getAddress());
                         }
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Addresses", (Serializable)listDeviceAddresses);
+                        intent.putExtra("BundleAddresses", bundle);
+
+                        startActivity(intent);
                     }
                 }
             }, SCAN_PERIOD);
