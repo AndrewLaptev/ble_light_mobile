@@ -37,7 +37,7 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final int SCAN_PERIOD = 3000;
+    private static final int SCAN_PERIOD = 4000;
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
@@ -86,8 +86,9 @@ public class MainActivity extends MainActivityDev {
                 if (scanState) {
                     btnStartScan.setImageAlpha(75);
                     scanProgressBar.setVisibility(View.VISIBLE);
-                    scanBleDevices();
+                    scanBleDevices(true);
                 } else {
+                    scanBleDevices(false);
                     btnStartScan.setImageAlpha(255);
                     scanProgressBar.setVisibility(View.INVISIBLE);
                 }
@@ -102,36 +103,40 @@ public class MainActivity extends MainActivityDev {
         mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
     }
 
-    private void scanBleDevices() {
+    private void scanBleDevices(boolean start) {
         if (!listBluetoothDevice.isEmpty()) {
             listBluetoothDevice.clear();
         }
-        ScanFilter scanFilter = new ScanFilter.Builder()
-                .setServiceUuid(BluetoothLeService.PARCEL_FILTER_SERVICE_UUID)
-                .build();
-        List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
-        scanFilters.add(scanFilter);
 
-        ScanSettings scanSettings =
-                new ScanSettings.Builder().build();
-
-        mBluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback);
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBluetoothLeScanner.stopScan(scanCallback);
-                btnStartScan.setImageAlpha(255);
-                scanProgressBar.setVisibility(View.INVISIBLE);
-                scanState = false;
-                btnStartScan.setEnabled(true);
-                final Intent intent = new Intent(MainActivity.this, LightManageActivity.class);
-                startActivity(intent);
-                for (BluetoothDeviceExt device : listBluetoothDevice) {
-                    Log.i("TEST", device.getDevice().getAddress());
+        if (start) {
+            ScanFilter scanFilter = new ScanFilter.Builder()
+                    .setServiceUuid(BluetoothLeService.PARCEL_FILTER_SERVICE_UUID)
+                    .build();
+            List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
+            scanFilters.add(scanFilter);
+            ScanSettings scanSettings =
+                    new ScanSettings.Builder().build();
+            mBluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(scanState) {
+                        mBluetoothLeScanner.stopScan(scanCallback);
+                        btnStartScan.setImageAlpha(255);
+                        scanProgressBar.setVisibility(View.INVISIBLE);
+                        scanState = !scanState;
+                        final Intent intent = new Intent(MainActivity.this, LightManageActivity.class);
+                        startActivity(intent);
+                        for (BluetoothDeviceExt device : listBluetoothDevice) {
+                            Log.i("TEST", device.getDevice().getAddress());
+                        }
+                    }
                 }
-            }
-        }, SCAN_PERIOD);
+            }, SCAN_PERIOD);
+        } else {
+            mBluetoothLeScanner.stopScan(scanCallback);
+            mHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     private final ScanCallback scanCallback = new ScanCallback() {
