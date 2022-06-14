@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LightManageActivity">
+    tools:context=".LightManageActivity"
+    >
+
+    <com.example.ble_light.light_picker.RGBColorPicker
+        android:id="@+id/light_picker"
+        android:layout_width="414dp"
+        android:layout_height="611dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:red_start_angle="120"
+        app:green_start_angle="300"
+        app:arc_length="120"/>
+
+    <ImageView
+        android:id="@+id/image_view_light_picker"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_light_picker"
+        app:layout_constraintBottom_toBottomOf="@+id/light_picker"
+        app:layout_constraintEnd_toEndOf="@+id/light_picker"
+        app:layout_constraintStart_toStartOf="@+id/light_picker"
+        app:layout_constraintTop_toTopOf="@+id/light_picker"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
