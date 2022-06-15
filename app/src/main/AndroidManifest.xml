@@ -34,15 +34,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".dev.MultiConnectionActivityDev"
+            android:name=".dev_mode.MultiConnectionActivityDev"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dev.ConnectionActivityDev"
+            android:name=".dev_mode.ConnectionActivityDev"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dev.MainActivityDev"
+            android:name=".dev_mode.MainActivityDev"
             android:exported="false"
             android:screenOrientation="portrait" />
 

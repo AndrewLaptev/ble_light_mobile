@@ -70,7 +70,7 @@ public class AllGattServices {
 
     public static String lookup(String name) {
         for(Map.Entry<String, String> entry: attributes.entrySet()) {
-            if(entry.getValue() == name) {
+            if(entry.getValue().equals(name)) {
                 return entry.getKey();
             }
         }

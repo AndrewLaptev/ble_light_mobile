@@ -14,4 +14,5 @@
     <string name="color_bright">%1$d%%</string>
     <string name="color_placeholder">Tap color</string>
     <string name="bright_placeholder">and bright</string>
+    <string name="light_picker_btn">Send</string>
 </resources>

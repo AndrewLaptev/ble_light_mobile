@@ -1,4 +1,4 @@
-package com.example.ble_light.dev;
+package com.example.ble_light.dev_mode;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;

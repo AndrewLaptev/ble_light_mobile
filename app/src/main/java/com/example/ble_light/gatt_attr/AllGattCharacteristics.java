@@ -1,6 +1,7 @@
 package com.example.ble_light.gatt_attr;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class AllGattCharacteristics {
@@ -235,10 +236,6 @@ public class AllGattCharacteristics {
         return attributes.containsKey(uuid);
     }
 
-    public static String lookup(String uuid) {
-        return lookup(uuid, "--");
-    }
-
     public static String lookup(UUID uuid) {
         return lookup(uuid.toString(), "--");
     }
@@ -246,5 +243,14 @@ public class AllGattCharacteristics {
     public static String lookup(String uuid, String defaultName) {
         String name = attributes.get(uuid);
         return name == null ? defaultName : name;
+    }
+
+    public static String lookup(String name) {
+        for(Map.Entry<String, String> entry: attributes.entrySet()) {
+            if(entry.getValue().equals(name)) {
+                return entry.getKey();
+            }
+        }
+        return "Unknown UUID";
     }
 }

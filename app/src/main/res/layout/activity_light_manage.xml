@@ -21,20 +21,23 @@
         app:arc_length="120"
         app:arc_width="10sp"/>
 
-    <ImageView
-        android:id="@+id/image_view_light_picker"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+    <ImageButton
+        android:id="@+id/image_button_light_picker"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/shape_light_picker"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/light_picker"
         app:layout_constraintEnd_toEndOf="@+id/light_picker"
         app:layout_constraintStart_toStartOf="@+id/light_picker"
         app:layout_constraintTop_toTopOf="@+id/light_picker"
+        app:srcCompat="@drawable/send_light_picker_btn_img"
         tools:ignore="ContentDescription" />
+
 
     <TextView
         android:id="@+id/colorTempView"
@@ -45,7 +48,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/image_view_light_picker"
+        app:layout_constraintBottom_toTopOf="@+id/image_button_light_picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/light_picker"
@@ -63,7 +66,33 @@
         app:layout_constraintBottom_toBottomOf="@+id/light_picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_light_picker"
+        app:layout_constraintTop_toBottomOf="@+id/image_button_light_picker"
         app:layout_constraintVertical_bias="0.68" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_alternates_medium"
+        android:text="@string/light_picker_btn"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/image_button_light_picker"
+        app:layout_constraintEnd_toEndOf="@+id/image_button_light_picker"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/image_button_light_picker"
+        app:layout_constraintTop_toTopOf="@+id/image_button_light_picker"
+        app:layout_constraintVertical_bias="0.497" />
+
+    <TextView
+        android:id="@+id/stateConnectView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_alternates_medium"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/light_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

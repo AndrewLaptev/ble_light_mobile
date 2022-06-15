@@ -361,6 +361,25 @@ public class BluetoothLeService extends Service {
         }
     }
 
+    public void writeCharacteristic(String service_uuid, String characteristic_uuid,
+                                    String value) {
+        UUID uuid_service = UUID.fromString(service_uuid);
+        UUID uuid_characteristic = UUID.fromString(characteristic_uuid);
+
+        if (mBluetoothAdapter == null || listBluetoothGattsExt.isEmpty()) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        for (BluetoothGattExt gatt : listBluetoothGattsExt) {
+            BluetoothGattCharacteristic characteristic = gatt.getBluetoothGatt()
+                    .getService(uuid_service).getCharacteristic(uuid_characteristic);
+            characteristic.setValue(value);
+            characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+
+            gatt.getBluetoothGatt().writeCharacteristic(characteristic);
+        }
+    }
+
     /**
      * Enables or disables notification on a give characteristic.
      *

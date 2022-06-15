@@ -27,7 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.ble_light.dev.MainActivityDev;
+import com.example.ble_light.dev_mode.MainActivityDev;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,11 +37,11 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final int SCAN_PERIOD = 4000;
+    private static final int SCAN_PERIOD = 1000;
 
     private final Handler mHandler = new Handler();
 
-    private BluetoothAdapter mBluetoothAdapter;
+    public static BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     List<BluetoothDeviceExt> listBluetoothDevice;
 

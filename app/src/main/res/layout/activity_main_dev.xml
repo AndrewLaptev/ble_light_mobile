@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="com.example.ble_light.dev.MainActivityDev">
+    tools:context="com.example.ble_light.dev_mode.MainActivityDev">
 
     <TextView
         android:layout_width="210dp"
