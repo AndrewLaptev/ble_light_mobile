@@ -6,7 +6,6 @@ import com.example.ble_light.light_picker.Paints
 import com.example.ble_light.light_picker.components.ArcComponent
 
 internal class GreenComponent(metrics: Metrics, paints: Paints, arcLength: Float, arcStartAngle: Float) : ArcComponent(metrics, paints, arcLength, arcStartAngle) {
-
     override val componentIndex: Int = 1
     override val range: Float = 255f
     override val noOfColors = 2
@@ -14,8 +13,8 @@ internal class GreenComponent(metrics: Metrics, paints: Paints, arcLength: Float
     override val colorPosition = FloatArray(noOfColors)
 
     override fun getColorArray(color: FloatArray): IntArray {
-        colors[0] = Color.BLACK
-        colors[1] = Color.rgb(0, 255, 0)
+        colors[0] = Color.rgb(204, 255, 255)
+        colors[1] = Color.rgb(255, 204, 102)
         return colors
     }
 }

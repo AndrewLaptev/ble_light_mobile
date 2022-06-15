@@ -14,8 +14,8 @@ internal class RedComponent(metrics: Metrics, paints: Paints, arcLength: Float, 
     override val colorPosition = FloatArray(noOfColors)
 
     override fun getColorArray(color: FloatArray): IntArray {
-        colors[0] = Color.BLACK
-        colors[1] = Color.rgb(255, 0, 0)
+        colors[0] = Color.rgb(0, 0, 0)
+        colors[1] = Color.rgb(metrics.red.toInt(), metrics.green.toInt(), metrics.blue.toInt())
         return colors
     }
 }

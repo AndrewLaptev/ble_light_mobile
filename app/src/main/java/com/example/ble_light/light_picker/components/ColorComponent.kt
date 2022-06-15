@@ -3,6 +3,7 @@ package com.example.ble_light.light_picker.components
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Shader
+import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
 import com.example.ble_light.light_picker.Metrics
@@ -10,6 +11,7 @@ import com.example.ble_light.light_picker.Paints
 import com.example.ble_light.light_picker.listeners.OnColorSelectionListener
 
 internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
+    var id: String = ""
 
     var radius: Float = 0f
 
@@ -43,7 +45,8 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
                     isTouched = true
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.getColor())
+                    colorSelectionListener?.onColorSelected(metrics.getColor(), angle.toFloat(),
+                        metrics.coeffBright, id)
                 }
             }
 
@@ -51,7 +54,8 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
                 if (isTouched) {
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.getColor())
+                    colorSelectionListener?.onColorSelected(metrics.getColor(), angle.toFloat(),
+                        metrics.coeffBright, id)
                 }
             }
 

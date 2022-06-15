@@ -5,7 +5,7 @@ package com.example.ble_light.light_picker.listeners
  */
 open class SimpleColorSelectionListener : OnColorSelectionListener {
 
-    override fun onColorSelected(color: Int) {}
+    override fun onColorSelected(color: Int, angle: Float, coeffBright: Float, id: String) {}
 
     override fun onColorSelectionStart(color: Int) {}
 

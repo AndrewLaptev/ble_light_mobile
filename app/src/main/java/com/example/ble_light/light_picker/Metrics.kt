@@ -4,6 +4,11 @@ import android.graphics.Paint
 import java.util.*
 
 internal abstract class Metrics(var centerX: Float = 0f, var centerY: Float = 0f, var color: FloatArray, val density: Float) {
+    abstract var red: Float
+    abstract var green: Float
+    abstract var blue: Float
+    abstract var coeffBright: Float
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

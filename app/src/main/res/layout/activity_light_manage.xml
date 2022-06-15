@@ -18,7 +18,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:red_start_angle="120"
         app:green_start_angle="300"
-        app:arc_length="120"/>
+        app:arc_length="120"
+        app:arc_width="10sp"/>
 
     <ImageView
         android:id="@+id/image_view_light_picker"
@@ -34,5 +35,35 @@
         app:layout_constraintStart_toStartOf="@+id/light_picker"
         app:layout_constraintTop_toTopOf="@+id/light_picker"
         tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/colorTempView"
+        android:layout_width="205dp"
+        android:layout_height="54dp"
+        android:fontFamily="@font/montserrat_alternates_medium"
+        android:hint="@string/color_placeholder"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/image_view_light_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/light_picker"
+        app:layout_constraintVertical_bias="0.323" />
+
+    <TextView
+        android:id="@+id/brightTempView"
+        android:layout_width="205dp"
+        android:layout_height="54dp"
+        android:fontFamily="@font/montserrat_alternates_medium"
+        android:hint="@string/bright_placeholder"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="@+id/light_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_light_picker"
+        app:layout_constraintVertical_bias="0.68" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

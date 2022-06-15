@@ -10,7 +10,7 @@ interface OnColorSelectionListener {
      *
      * @param color the selected color
      */
-    fun onColorSelected(color: Int)
+    fun onColorSelected(color: Int, angle: Float, coeffBright: Float, id: String)
 
     /**
      * Invoked when the color selection started

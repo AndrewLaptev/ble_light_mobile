@@ -10,4 +10,8 @@
     <string name="esp_multiple_connection_ON">ON</string>
     <string name="esp_multiple_connection_OFF">OFF</string>
     <string name="activity_main_menu_dev_item">Developer mode</string>
+    <string name="color_kelvin">%1$dK</string>
+    <string name="color_bright">%1$d%%</string>
+    <string name="color_placeholder">Tap color</string>
+    <string name="bright_placeholder">and bright</string>
 </resources>

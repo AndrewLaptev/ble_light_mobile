@@ -7,8 +7,10 @@ package com.example.ble_light.light_picker
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.annotation.RequiresApi
 import com.example.ble_light.R
 import com.example.ble_light.light_picker.components.ColorComponent
 import com.example.ble_light.light_picker.components.rgb.GreenComponent
@@ -18,7 +20,7 @@ import com.example.ble_light.light_picker.listeners.OnColorSelectionListener
 
 open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ColorPicker(context, attrs, defStyleAttr) {
 
-    private val metrics = RgbMetrics(color = floatArrayOf(255f, 0f, 0f), density = resources.displayMetrics.density)
+    private val metrics = RgbMetrics(color = floatArrayOf(200f, 200f, 200f), density = resources.displayMetrics.density)
 
     private val redComponent: ColorComponent
     private val greenComponent: ColorComponent
@@ -27,6 +29,7 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
     private val greenRadiusOffset: Float
 
     override val color: Int
+        @RequiresApi(Build.VERSION_CODES.O)
         get() = metrics.getColor()
 
     init {
@@ -42,6 +45,7 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
                 it.indicatorStrokeColor = typedArray.getColor(R.styleable.RGBColorPicker_red_indicator_stroke_color, indicatorStrokeColor)
                 it.strokeColor = typedArray.getColor(R.styleable.RGBColorPicker_red_stroke_color, strokeColor)
                 it.indicatorRadius = typedArray.getDimension(R.styleable.RGBColorPicker_red_indicator_radius, indicatorRadius)
+                it.id = "bright_temp"
             }
 
             val greenArcLength = typedArray.getFloat(R.styleable.RGBColorPicker_green_arc_length, if (arcLength == 0f) 120f else arcLength)
@@ -53,6 +57,7 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
                 it.indicatorStrokeColor = typedArray.getColor(R.styleable.RGBColorPicker_green_indicator_stroke_color, indicatorStrokeColor)
                 it.strokeColor = typedArray.getColor(R.styleable.RGBColorPicker_green_stroke_color, strokeColor)
                 it.indicatorRadius = typedArray.getDimension(R.styleable.RGBColorPicker_green_indicator_radius, indicatorRadius)
+                it.id = "color_temp"
             }
 
             redRadiusOffset = typedArray.getDimension(R.styleable.RGBColorPicker_red_radius_offset, if (radiusOffset == 0f) dp(25f) else radiusOffset)
@@ -77,8 +82,8 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
         metrics.centerX = width / 2f
         metrics.centerY = height / 2f
 
-        redComponent.updateComponent(redComponent.angle)
         greenComponent.updateComponent(greenComponent.angle)
+        redComponent.updateComponent(redComponent.angle)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -96,11 +101,11 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     override fun setColor(color: Int) {
-        val red = Color.red(color).toFloat()
+        val red = Color.blue(color).toFloat()
         metrics.color[0] = red
         redComponent.updateAngle(red)
 
-        val green = Color.green(color).toFloat()
+        val green = Color.blue(color).toFloat()
         metrics.color[1] = green
         greenComponent.updateAngle(green)
 
