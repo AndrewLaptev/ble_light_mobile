@@ -63,6 +63,7 @@ public class MainActivity extends MainActivityDev {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.BLUETOOTH_CONNECT,
                     Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_ADMIN,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION
             }, ACCESS_BLUETOOTH_PERMISSION);

@@ -114,7 +114,7 @@ public class LightManageActivity extends AppCompatActivity {
                             authDataSending(accessToken);
                         }
                     }
-                }, 500);
+                }, 600);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 // Something later
             }

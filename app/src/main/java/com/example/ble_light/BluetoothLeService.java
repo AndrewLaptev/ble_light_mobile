@@ -124,6 +124,12 @@ public class BluetoothLeService extends Service {
                                                 BluetoothGattCharacteristic characteristic) {
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
+
+            @Override
+            public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+                super.onReadRemoteRssi(gatt, rssi, status);
+                Log.d(TAG, "RSSI is : " + rssi);
+            }
         };
 
         public BluetoothGatt getBluetoothGatt() {
