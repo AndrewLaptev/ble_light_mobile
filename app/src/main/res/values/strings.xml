@@ -15,4 +15,8 @@
     <string name="color_placeholder">Tap color</string>
     <string name="bright_placeholder">and bright</string>
     <string name="light_picker_btn">Send</string>
+    <string name="state_find_search">Search devices…</string>
+    <string name="state_find_found">Something found</string>
+    <string name="state_find_not_found">Not found!</string>
+    <string name="state_find_init">Tap to find devices</string>
 </resources>

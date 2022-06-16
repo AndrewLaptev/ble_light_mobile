@@ -19,36 +19,74 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ble_light.dev_mode.MainActivityDev;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @SuppressLint("MissingPermission")
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final int SCAN_PERIOD = 3000;
+    private static final int SCAN_PERIOD = 4000;
+    private static final int RSSI_THRESHOLD = 75;
 
     private final Handler mHandler = new Handler();
 
     public static BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
-    List<BluetoothDeviceExt> listBluetoothDevice;
+    public List<BluetoothDeviceExt> listBluetoothDevice;
 
     private ImageButton btnStartScan;
     private ProgressBar scanProgressBar;
+    private TextView stateFindView;
 
     private boolean scanState = false;
+
+    private final HashMap<String, ArrayList<Integer>> mapDeviceRSSI = new HashMap<>();
+
+    private Kalman mKalman = new Kalman();
+
+    private class Kalman {
+        private final double Q = 0.05;      // process_noise
+        private final double R = 45.333332; // sensor_noise
+        private double P = 0;               // estimated_error
+        private final double P_init = 13.666667;
+
+        private double x = 0;
+        private double k = 0;
+
+        public ArrayList<Integer> filter(int init_rssi, ArrayList<Integer> rssi_list) {
+            ArrayList<Integer> filtered_rssi = new ArrayList<>();
+            for (int i = 0; i < rssi_list.size(); i++) {
+                if (i == 0) {
+                    P = P_init + Q;
+                    k = P / (P + R);
+                    x = init_rssi + k * (rssi_list.get(i) - init_rssi);
+                    P = (1 - k) * P;
+                } else {
+                    P = P + Q;
+                    k = P / (P + R);
+                    x = x + k * (rssi_list.get(i) - x);
+                    P = (1 - k) * P;
+                }
+                filtered_rssi.add((int)x);
+            }
+            return filtered_rssi;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +117,8 @@ public class MainActivity extends MainActivityDev {
         scanProgressBar = findViewById(R.id.progressBar);
         scanProgressBar.setVisibility(View.INVISIBLE);
 
+        stateFindView = findViewById(R.id.stateFindView);
+
         btnStartScan = (ImageButton) findViewById(R.id.start_scan_button);
         btnStartScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +145,7 @@ public class MainActivity extends MainActivityDev {
     }
 
     private void scanBleDevices(boolean start) {
+        stateFindView.setText(R.string.state_find_search);
         if (!listBluetoothDevice.isEmpty()) {
             listBluetoothDevice.clear();
         }
@@ -132,14 +173,27 @@ public class MainActivity extends MainActivityDev {
                                 LightManageActivity.class);
 
                         ArrayList<String> listDeviceAddresses = new ArrayList<String>();
-                        for (BluetoothDeviceExt device : listBluetoothDevice) {
-                            listDeviceAddresses.add(device.getDevice().getAddress());
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("Addresses", (Serializable)listDeviceAddresses);
-                        intent.putExtra("BundleAddresses", bundle);
 
-                        startActivity(intent);
+                        if (!mapDeviceRSSI.isEmpty()) {
+                            for (String address : mapDeviceRSSI.keySet()) {
+                                ArrayList<Integer> list_rssi_filtered =
+                                        mKalman.filter(-65, mapDeviceRSSI.get(address));
+
+                                int sumRSSI = filterRSSI(list_rssi_filtered);
+
+                                if (sumRSSI <= RSSI_THRESHOLD) {
+                                    stateFindView.setText(R.string.state_find_found);
+                                    listDeviceAddresses.add(address);
+                                }
+                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Addresses", (Serializable)listDeviceAddresses);
+                            intent.putExtra("BundleAddresses", bundle);
+
+                            startActivity(intent);
+                        } else {
+                            stateFindView.setText(R.string.state_find_not_found);
+                        }
                     }
                 }
             }, SCAN_PERIOD);
@@ -149,10 +203,31 @@ public class MainActivity extends MainActivityDev {
         }
     }
 
+    private int filterRSSI(ArrayList<Integer> rssi_list) {
+        int sumRSSI = 0;
+        int divider = 0;
+
+        for (int rssi : rssi_list) {
+            sumRSSI += Math.abs(rssi);
+            divider++;
+        }
+        sumRSSI = sumRSSI/divider;
+        return sumRSSI;
+    }
+
     private final ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
+            String devAddress = result.getDevice().getAddress();
+            int devRSSI = result.getRssi();
+
+            if (mapDeviceRSSI.get(devAddress) == null) {
+                mapDeviceRSSI.put(devAddress, new ArrayList<Integer>());
+            }
+
+            mapDeviceRSSI.get(devAddress).add(devRSSI);
+
             BluetoothDeviceExt device = new BluetoothDeviceExt();
             device.setDevice(result.getDevice());
             device.setRawRSSI(result.getRssi());
@@ -185,6 +260,12 @@ public class MainActivity extends MainActivityDev {
         } else {
             listBluetoothDevice.get(listBluetoothDevice.indexOf(device)).setRawRSSI(device.getRawRSSI());
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        stateFindView.setText(R.string.state_find_init);
     }
 
     @Override

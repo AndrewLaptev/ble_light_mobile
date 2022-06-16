@@ -114,7 +114,7 @@ public class LightManageActivity extends AppCompatActivity {
                             authDataSending(accessToken);
                         }
                     }
-                }, 600);
+                }, 1000);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 // Something later
             }
@@ -125,7 +125,8 @@ public class LightManageActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                stateConnectView.setText(state);
+                String text = state + ": " + String.valueOf(listDevicesAddresses.size());
+                stateConnectView.setText(text);
             }
         });
     }
