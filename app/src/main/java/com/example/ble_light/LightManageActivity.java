@@ -14,6 +14,7 @@ import android.content.ServiceConnection;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -38,8 +39,15 @@ public class LightManageActivity extends AppCompatActivity {
     private ServiceConnection serviceConnection;
     private BluetoothLeService mBluetoothLeService;
 
-    private final String serviceUUID = AllGattServices.lookup("Authentication");
-    private final String characteristicUUID = AllGattCharacteristics.lookup("Authorization data");
+    private final Handler mHandler = new Handler();
+
+    private final String authServiceUUID = AllGattServices.lookup("Authentication");
+    private final String authCharacteristicUUID = AllGattCharacteristics.lookup("Authorization data");
+    private boolean authApprove = false;
+    private final String accessToken = "1";
+
+    private final String lightServiceUUID = AllGattServices.lookup("Light manage");
+    private final String lightCharacteristicUUID = AllGattCharacteristics.lookup("Level of light");
 
     private TextView stateConnectView;
 
@@ -47,8 +55,8 @@ public class LightManageActivity extends AppCompatActivity {
     private TextView colorTempView;
     private TextView brightTempView;
 
-    private int colorTemperature;
-    private int colorBright;
+    private int colorTemperature = -1;
+    private int colorBright = -1;
 
     private boolean sendingApprove = false;
 
@@ -99,6 +107,14 @@ public class LightManageActivity extends AppCompatActivity {
                 updateConnectionState("Devices disconnected");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!authApprove) {
+                            authDataSending(accessToken);
+                        }
+                    }
+                }, 500);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 // Something later
             }
@@ -114,9 +130,9 @@ public class LightManageActivity extends AppCompatActivity {
         });
     }
 
-    private boolean authConnection(String token) {
-        mBluetoothLeService.writeCharacteristic(serviceUUID, characteristicUUID, token);
-        return true;
+    private void authDataSending(String token) {
+        mBluetoothLeService.writeCharacteristic(authServiceUUID, authCharacteristicUUID, token);
+        authApprove = true;
     }
 
     @Override
@@ -161,7 +177,7 @@ public class LightManageActivity extends AppCompatActivity {
         Bundle serAddresses = intent.getBundleExtra("BundleAddresses");
         listDevicesAddresses = (ArrayList<String>) serAddresses.getSerializable("Addresses");
 
-        Log.i("TEST_LIGHT_MANAGE", listDevicesAddresses.toString());
+        Log.i(TAG, listDevicesAddresses.toString());
 
         btnLightPickerSend = findViewById(R.id.image_button_light_picker);
         btnLightPickerSend.setImageAlpha(0);
@@ -174,7 +190,9 @@ public class LightManageActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_UP:
                         if (sendingApprove) {
-
+                            String value = String.valueOf(colorBright) +
+                                    "/" + String.valueOf(colorTemperature);
+                            mBluetoothLeService.writeCharacteristic(lightServiceUUID, lightCharacteristicUUID, value);
                         }
 
                         btnLightPickerSend.setImageAlpha(0);
@@ -192,7 +210,6 @@ public class LightManageActivity extends AppCompatActivity {
             @Override
             public void onColorSelected(int color, float angle,
                                         float coeffBright, @NonNull String id) {
-                Log.i("TEST", String.valueOf(angle) + " " + String.valueOf(coeffBright));
                 if (id.equals("color_temp")) {
                     if (angle > 0 && angle <= 60) {
                         colorTemperature = (int)((420 - (angle + 360)) * 20.84 + 3400);
@@ -206,7 +223,7 @@ public class LightManageActivity extends AppCompatActivity {
                         colorBright = 0;
                     }
                 }
-                if (colorTemperature != 0 && colorBright != 0){
+                if (colorTemperature != -1 && colorBright != -1){
                     btnLightPickerSend.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                     colorTempView.setText(getString(R.string.color_kelvin, colorTemperature));
                     brightTempView.setText(getString(R.string.color_bright, colorBright));
@@ -214,7 +231,6 @@ public class LightManageActivity extends AppCompatActivity {
                 }
             }
         });
-
         initServiceConnection();
     }
 }

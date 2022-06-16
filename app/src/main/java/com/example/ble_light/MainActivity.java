@@ -37,7 +37,7 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final int SCAN_PERIOD = 1000;
+    private static final int SCAN_PERIOD = 3000;
 
     private final Handler mHandler = new Handler();
 
