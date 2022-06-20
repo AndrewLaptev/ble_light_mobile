@@ -47,7 +47,6 @@ public class MainActivity extends MainActivityDev {
 
     public static BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
-    public List<BluetoothDeviceExt> listBluetoothDevice;
 
     private ImageButton btnStartScan;
     private ProgressBar scanProgressBar;
@@ -93,7 +92,6 @@ public class MainActivity extends MainActivityDev {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listBluetoothDevice = new ArrayList<>();
         getBluetoothAdapterAndLeScanner();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
@@ -146,9 +144,6 @@ public class MainActivity extends MainActivityDev {
 
     private void scanBleDevices(boolean start) {
         stateFindView.setText(R.string.state_find_search);
-        if (!listBluetoothDevice.isEmpty()) {
-            listBluetoothDevice.clear();
-        }
 
         if (start) {
             ScanFilter scanFilter = new ScanFilter.Builder()
@@ -227,22 +222,6 @@ public class MainActivity extends MainActivityDev {
             }
 
             mapDeviceRSSI.get(devAddress).add(devRSSI);
-
-            BluetoothDeviceExt device = new BluetoothDeviceExt();
-            device.setDevice(result.getDevice());
-            device.setRawRSSI(result.getRssi());
-            addBluetoothDevice(device);
-        }
-
-        @Override
-        public void onBatchScanResults(List<ScanResult> results) {
-            super.onBatchScanResults(results);
-            for (ScanResult result : results) {
-                BluetoothDeviceExt device = new BluetoothDeviceExt();
-                device.setDevice(result.getDevice());
-                device.setRawRSSI(result.getRssi());
-                addBluetoothDevice(device);
-            }
         }
 
         @Override
@@ -253,14 +232,6 @@ public class MainActivity extends MainActivityDev {
                     Toast.LENGTH_LONG).show();
         }
     };
-
-    private void addBluetoothDevice(BluetoothDeviceExt device){
-        if(!listBluetoothDevice.contains(device)){
-            listBluetoothDevice.add(device);
-        } else {
-            listBluetoothDevice.get(listBluetoothDevice.indexOf(device)).setRawRSSI(device.getRawRSSI());
-        }
-    }
 
     @Override
     protected void onResume() {
