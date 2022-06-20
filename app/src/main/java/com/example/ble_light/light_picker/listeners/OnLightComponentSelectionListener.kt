@@ -3,26 +3,26 @@ package com.example.ble_light.light_picker.listeners
 /**
  * Listener to listen to color change events
  */
-interface OnColorSelectionListener {
+interface OnLightComponentSelectionListener {
 
     /**
      * Invoked every time the color changes
      *
      * @param color the selected color
      */
-    fun onColorSelected(color: Int, angle: Float, coeffBright: Float, id: String)
+    fun onLightComponentSelection(color: Int, angle: Float, brightness: Float, id: String)
 
     /**
      * Invoked when the color selection started
      *
      * @param color the color before the selection started
      */
-    fun onColorSelectionStart(color: Int)
+    fun onLightComponentSelectionStart(color: Int)
 
     /**
      * Invoked when the color selection is over
      *
      * @param color the selected color
      */
-    fun onColorSelectionEnd(color: Int)
+    fun onLightComponentSelectionEnd(color: Int)
 }

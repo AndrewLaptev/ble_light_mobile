@@ -1,4 +1,4 @@
-package com.example.ble_light.light_picker.components.rgb
+package com.example.ble_light.light_picker.components.light
 
 import android.graphics.Color
 import android.os.Build
@@ -14,7 +14,7 @@ internal class RgbMetrics(centerX: Float = 0f, centerY: Float = 0f, color: Float
     override var red: Float = 0f
     override var green: Float = 0f
     override var blue: Float = 0f
-    override var coeffBright: Float = 0f
+    override var brightness: Float = 0f
 
     override fun hue(): Float {
         val hsl = FloatArray(3)
@@ -24,12 +24,12 @@ internal class RgbMetrics(centerX: Float = 0f, centerY: Float = 0f, color: Float
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getColor(): Int {
-        coeffBright = (18.05f * ln(color[0])) / 100
+        brightness = (18.05f * ln(color[0])) / 100 // law of brightness change
 
-        if (coeffBright > 0) {
-            red =  ((color[1] * coeffRed) + 204) * coeffBright
-            green = (255 - (color[1] * coeffGreen)) * coeffBright
-            blue = (255 - (color[1] * coeffBlue)) * coeffBright
+        if (brightness > 0) {
+            red =  ((color[1] * coeffRed) + 204) * brightness
+            green = (255 - (color[1] * coeffGreen)) * brightness
+            blue = (255 - (color[1] * coeffBlue)) * brightness
         } else {
             red =  0f
             green = 0f

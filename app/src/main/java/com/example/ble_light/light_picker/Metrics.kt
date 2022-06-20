@@ -7,7 +7,7 @@ internal abstract class Metrics(var centerX: Float = 0f, var centerY: Float = 0f
     abstract var red: Float
     abstract var green: Float
     abstract var blue: Float
-    abstract var coeffBright: Float
+    abstract var brightness: Float
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

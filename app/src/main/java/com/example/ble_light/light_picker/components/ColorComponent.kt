@@ -3,12 +3,11 @@ package com.example.ble_light.light_picker.components
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Shader
-import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
 import com.example.ble_light.light_picker.Metrics
 import com.example.ble_light.light_picker.Paints
-import com.example.ble_light.light_picker.listeners.OnColorSelectionListener
+import com.example.ble_light.light_picker.listeners.OnLightComponentSelectionListener
 
 internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
     var id: String = ""
@@ -29,7 +28,7 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
     var angle: Double = 0.0
 
     private var isTouched = false
-    private var colorSelectionListener: OnColorSelectionListener? = null
+    private var colorSelectionListener: OnLightComponentSelectionListener? = null
 
     abstract fun getShader(): Shader
     abstract fun drawComponent(canvas: Canvas)
@@ -41,12 +40,12 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
         when (event.action) {
             ACTION_DOWN -> {
                 if (PointF(x, y) in this) {
-                    colorSelectionListener?.onColorSelectionStart(metrics.getColor())
+                    colorSelectionListener?.onLightComponentSelectionStart(metrics.getColor())
                     isTouched = true
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.getColor(), angle.toFloat(),
-                        metrics.coeffBright, id)
+                    colorSelectionListener?.onLightComponentSelection(metrics.getColor(), angle.toFloat(),
+                        metrics.brightness, id)
                 }
             }
 
@@ -54,13 +53,13 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
                 if (isTouched) {
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.getColor(), angle.toFloat(),
-                        metrics.coeffBright, id)
+                    colorSelectionListener?.onLightComponentSelection(metrics.getColor(), angle.toFloat(),
+                        metrics.brightness, id)
                 }
             }
 
             ACTION_UP -> {
-                if (isTouched) colorSelectionListener?.onColorSelectionEnd(metrics.getColor())
+                if (isTouched) colorSelectionListener?.onLightComponentSelectionEnd(metrics.getColor())
                 isTouched = false
             }
         }
@@ -88,7 +87,7 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
 
     abstract fun updateAngle(component: Float)
 
-    internal fun setColorSelectionListener(listener: OnColorSelectionListener) {
+    internal fun setColorSelectionListener(listener: OnLightComponentSelectionListener) {
         colorSelectionListener = listener
     }
 

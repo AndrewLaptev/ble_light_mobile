@@ -27,13 +27,20 @@ import java.util.ArrayList;
 import com.example.ble_light.dev_mode.MultiConnectionActivityDev;
 import com.example.ble_light.gatt_attr.AllGattCharacteristics;
 import com.example.ble_light.gatt_attr.AllGattServices;
-import com.example.ble_light.light_picker.ColorPicker;
-import com.example.ble_light.light_picker.listeners.SimpleColorSelectionListener;
+import com.example.ble_light.light_picker.Picker;
+import com.example.ble_light.light_picker.listeners.SimpleLightSelectionListener;
 
 @SuppressLint("ClickableViewAccessibility")
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class LightManageActivity extends AppCompatActivity {
     private final static String TAG = LightManageActivity.class.getSimpleName();
+    private final String ACCESS_TOKEN = "12345"; // use another values!
+    private final int AUTH_DELAY = 1000;
+    private final int EFFECT_COLOR_TEMP_MIN = 3400; // true values 2700 and 6500, but leds flicker
+    private final int EFFECT_COLOR_TEMP_MAX = 5900;
+    private final int COLOR_ARC_ANGLE_RANGE = 120;
+    private final float COLOR_TEMP_ANGLE_STEP = (float)(EFFECT_COLOR_TEMP_MAX - EFFECT_COLOR_TEMP_MIN)
+            / COLOR_ARC_ANGLE_RANGE;
 
     public ArrayList<String> listDevicesAddresses = new ArrayList<String>();
     private ServiceConnection serviceConnection;
@@ -43,8 +50,6 @@ public class LightManageActivity extends AppCompatActivity {
 
     private final String authServiceUUID = AllGattServices.lookup("Authentication");
     private final String authCharacteristicUUID = AllGattCharacteristics.lookup("Authorization data");
-    private boolean authApprove = false;
-    private final String accessToken = "1";
 
     private final String lightServiceUUID = AllGattServices.lookup("Light manage");
     private final String lightCharacteristicUUID = AllGattCharacteristics.lookup("Level of light");
@@ -58,6 +63,7 @@ public class LightManageActivity extends AppCompatActivity {
     private int colorTemperature = -1;
     private int colorBright = -1;
 
+    private boolean authApprove = false;
     private boolean sendingApprove = false;
 
     private void initServiceConnection() {
@@ -111,10 +117,10 @@ public class LightManageActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (!authApprove) {
-                            authDataSending(accessToken);
+                            authDataSending(ACCESS_TOKEN);
                         }
                     }
-                }, 1000);
+                }, AUTH_DELAY);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 // Something later
             }
@@ -195,7 +201,6 @@ public class LightManageActivity extends AppCompatActivity {
                                     "/" + String.valueOf(colorTemperature);
                             mBluetoothLeService.writeCharacteristic(lightServiceUUID, lightCharacteristicUUID, value);
                         }
-
                         btnLightPickerSend.setImageAlpha(0);
                         break;
                 }
@@ -206,20 +211,21 @@ public class LightManageActivity extends AppCompatActivity {
         colorTempView = findViewById(R.id.colorTempView);
         brightTempView = findViewById(R.id.brightTempView);
 
-        final ColorPicker colorPicker = findViewById(R.id.light_picker);
-        colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
+        final Picker colorPicker = findViewById(R.id.light_picker);
+        colorPicker.setColorSelectionListener(new SimpleLightSelectionListener() {
             @Override
-            public void onColorSelected(int color, float angle,
-                                        float coeffBright, @NonNull String id) {
+            public void onLightComponentSelection(int color, float angle,
+                                                  float brightness, @NonNull String id) {
                 if (id.equals("color_temp")) {
+                    // angle of color temp acr from 60 to 300 in reverse order (equal 120)
                     if (angle > 0 && angle <= 60) {
-                        colorTemperature = (int)((420 - (angle + 360)) * 20.84 + 3400);
+                        colorTemperature = (int)((420 - (angle + 360)) * COLOR_TEMP_ANGLE_STEP + EFFECT_COLOR_TEMP_MIN);
                     } else {
-                        colorTemperature = (int)((420 - angle) * 20.84 + 3400);
+                        colorTemperature = (int)((420 - angle) * COLOR_TEMP_ANGLE_STEP + EFFECT_COLOR_TEMP_MIN);
                     }
                 } else if (id.equals("bright_temp")) {
-                    if (coeffBright >= 0) {
-                        colorBright = (int)(coeffBright * 100);
+                    if (brightness >= 0) {
+                        colorBright = (int)(brightness * 100);
                     } else {
                         colorBright = 0;
                     }

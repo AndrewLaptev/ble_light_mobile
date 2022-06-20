@@ -422,7 +422,4 @@ public class BluetoothLeService extends Service {
         if (listBluetoothGattsExt.isEmpty()) return null;
         return listBluetoothGattsExt.get(0).getBluetoothGatt().getServices(); // all devices have equals services
     }
-
-
-
 }

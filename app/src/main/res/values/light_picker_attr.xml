@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="ColorPicker">
+    <declare-styleable name="Picker">
         <attr name="arc_width" format="dimension" />
         <attr name="stroke_width" format="dimension" />
         <attr name="indicator_radius" format="dimension" />
@@ -50,7 +50,7 @@
         <attr name="lightness_radius_offset" format="dimension" />
     </declare-styleable>
 
-    <declare-styleable name="RGBColorPicker">
+    <declare-styleable name="LightPicker">
         <attr name="red_arc_width" format="dimension" />
         <attr name="green_arc_width" format="dimension" />
         <attr name="blue_arc_width" format="dimension" />

@@ -8,9 +8,9 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import com.example.ble_light.R
-import com.example.ble_light.light_picker.listeners.OnColorSelectionListener
+import com.example.ble_light.light_picker.listeners.OnLightComponentSelectionListener
 
-abstract class ColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+abstract class Picker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
     protected val paints = Paints()
     protected val config: Config
@@ -19,20 +19,20 @@ abstract class ColorPicker @JvmOverloads constructor(context: Context, attrs: At
 
     abstract override fun onDraw(canvas: Canvas)
     abstract override fun onSizeChanged(width: Int, height: Int, oldW: Int, oldH: Int)
-    abstract fun setColorSelectionListener(listener: OnColorSelectionListener)
+    abstract fun setColorSelectionListener(listener: OnLightComponentSelectionListener)
     abstract fun setColor(color: Int)
 
     init {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorPicker, defStyleAttr, 0)
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Picker, defStyleAttr, 0)
 
-        val arcWidth = typedArray.getDimension(R.styleable.ColorPicker_arc_width, dp(5f))
-        val strokeWidth = typedArray.getDimension(R.styleable.ColorPicker_stroke_width, 0f)
-        val indicatorRadius = typedArray.getDimension(R.styleable.ColorPicker_indicator_radius, dp(15f))
-        val indicatorStrokeWidth = typedArray.getDimension(R.styleable.ColorPicker_indicator_stroke_width, dp(2f))
-        val strokeColor = typedArray.getColor(R.styleable.ColorPicker_stroke_color, 0)
-        val indicatorStrokeColor = typedArray.getColor(R.styleable.ColorPicker_indicator_stroke_color, 0)
-        val arcLength = typedArray.getFloat(R.styleable.ColorPicker_arc_length, 0f)
-        val radiusOffset = typedArray.getDimension(R.styleable.ColorPicker_radius_offset, 0f)
+        val arcWidth = typedArray.getDimension(R.styleable.Picker_arc_width, dp(5f))
+        val strokeWidth = typedArray.getDimension(R.styleable.Picker_stroke_width, 0f)
+        val indicatorRadius = typedArray.getDimension(R.styleable.Picker_indicator_radius, dp(15f))
+        val indicatorStrokeWidth = typedArray.getDimension(R.styleable.Picker_indicator_stroke_width, dp(2f))
+        val strokeColor = typedArray.getColor(R.styleable.Picker_stroke_color, 0)
+        val indicatorStrokeColor = typedArray.getColor(R.styleable.Picker_indicator_stroke_color, 0)
+        val arcLength = typedArray.getFloat(R.styleable.Picker_arc_length, 0f)
+        val radiusOffset = typedArray.getDimension(R.styleable.Picker_radius_offset, 0f)
 
         typedArray.recycle()
 
@@ -48,7 +48,7 @@ abstract class ColorPicker @JvmOverloads constructor(context: Context, attrs: At
         val bundle = super.onSaveInstanceState()
         if (bundle != null) {
             return SavedState(bundle).apply {
-                color = this@ColorPicker.color
+                color = this@Picker.color
             }
         }
         return null

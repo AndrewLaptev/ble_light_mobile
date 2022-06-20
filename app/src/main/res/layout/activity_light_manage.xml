@@ -8,7 +8,7 @@
     tools:context=".LightManageActivity"
     >
 
-    <com.example.ble_light.light_picker.RGBColorPicker
+    <com.example.ble_light.light_picker.LightPicker
         android:id="@+id/light_picker"
         android:layout_width="414dp"
         android:layout_height="611dp"
