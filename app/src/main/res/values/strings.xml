@@ -19,4 +19,6 @@
     <string name="state_find_found">Something found</string>
     <string name="state_find_not_found">Not found!</string>
     <string name="state_find_init">Tap to find devices</string>
+    <string name="rssi_dbm">&#8211;%1$d dBm</string>
+    <string name="rssi_threshold_dsc">RSSI threshold</string>
 </resources>

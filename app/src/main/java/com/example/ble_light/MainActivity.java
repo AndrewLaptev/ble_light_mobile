@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,13 +36,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressLint("MissingPermission")
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final int SCAN_PERIOD = 4000;
-    private static final int RSSI_THRESHOLD = 75;
+    private static final int SCAN_PERIOD = 3000;
+    public static int rssiThreshold = 65;
+
+    private SeekBar rssiSeekBar;
+    private TextView rssiThreshText;
 
     private final Handler mHandler = new Handler();
 
@@ -56,9 +61,9 @@ public class MainActivity extends MainActivityDev {
 
     private final HashMap<String, ArrayList<Integer>> mapDeviceRSSI = new HashMap<>();
 
-    private Kalman mKalman = new Kalman();
+    private final Kalman mKalman = new Kalman();
 
-    private class Kalman {
+    private static class Kalman {
         private final double Q = 0.05;      // process_noise
         private final double R = 45.333332; // sensor_noise
         private double P = 0;               // estimated_error
@@ -133,6 +138,28 @@ public class MainActivity extends MainActivityDev {
                 }
             }
         });
+
+        rssiSeekBar = findViewById(R.id.rssi_thresh_bar);
+        rssiThreshText = findViewById(R.id.rssi_thresh_text);
+
+        rssiThreshText.setText(R.string.rssi_threshold_dsc);
+
+        rssiSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                rssiThreshold = progress;
+                rssiThreshText.setText(getString(R.string.rssi_dbm, rssiThreshold));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.S)
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     private void getBluetoothAdapterAndLeScanner() {
@@ -172,20 +199,29 @@ public class MainActivity extends MainActivityDev {
                         if (!mapDeviceRSSI.isEmpty()) {
                             for (String address : mapDeviceRSSI.keySet()) {
                                 ArrayList<Integer> list_rssi_filtered =
-                                        mKalman.filter(-65, mapDeviceRSSI.get(address));
+                                        mKalman.filter(-rssiThreshold,
+                                                Objects.requireNonNull(mapDeviceRSSI.get(address)));
 
-                                int sumRSSI = filterRSSI(list_rssi_filtered);
+                                int sumRSSI = meanRSSI(list_rssi_filtered);
 
-                                if (sumRSSI <= RSSI_THRESHOLD) {
+                                Log.i("RSSI_THRESHOLD", String.valueOf(rssiThreshold));
+                                Log.i("FILTERED_ARRAY_RSSI", String.valueOf(list_rssi_filtered));
+                                Log.i("FILTERED_MEAN_RSSI", String.valueOf(sumRSSI));
+
+                                if (sumRSSI <= rssiThreshold) {
                                     stateFindView.setText(R.string.state_find_found);
                                     listDeviceAddresses.add(address);
                                 }
                             }
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("Addresses", (Serializable)listDeviceAddresses);
-                            intent.putExtra("BundleAddresses", bundle);
+                            if (!listDeviceAddresses.isEmpty()) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Addresses", (Serializable) listDeviceAddresses);
+                                intent.putExtra("BundleAddresses", bundle);
 
-                            startActivity(intent);
+                                startActivity(intent);
+                            } else {
+                                stateFindView.setText(R.string.state_find_not_found);
+                            }
                         } else {
                             stateFindView.setText(R.string.state_find_not_found);
                         }
@@ -198,7 +234,7 @@ public class MainActivity extends MainActivityDev {
         }
     }
 
-    private int filterRSSI(ArrayList<Integer> rssi_list) {
+    private int meanRSSI(ArrayList<Integer> rssi_list) {
         int sumRSSI = 0;
         int divider = 0;
 
@@ -221,7 +257,7 @@ public class MainActivity extends MainActivityDev {
                 mapDeviceRSSI.put(devAddress, new ArrayList<Integer>());
             }
 
-            mapDeviceRSSI.get(devAddress).add(devRSSI);
+            Objects.requireNonNull(mapDeviceRSSI.get(devAddress)).add(devRSSI);
         }
 
         @Override
@@ -248,7 +284,8 @@ public class MainActivity extends MainActivityDev {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.activity_main_menu) {
+        int itemChoose = item.getItemId();
+        if (itemChoose == R.id.dev_mode) {
             final Intent intent = new Intent(this, MainActivityDev.class);
             startActivity(intent);
             return true;
