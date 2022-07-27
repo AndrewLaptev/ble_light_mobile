@@ -48,7 +48,7 @@ public class ConnectionActivityDev extends AppCompatActivity {
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothLeService mBluetoothLeService;
 
-    TextView textViewState;
+    private TextView textViewState;
     private ExpandableListView mGattServicesList;
 
     private final String LIST_NAME = "NAME";
