@@ -21,31 +21,65 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BLE_light">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_settings_activity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
             android:name=".LightManageActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_light_manage_activity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:label="@string/title_main_activity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".dev_mode.MultiConnectionActivityDev"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_multiconnection_dev_activity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".dev_mode.MainActivityDev">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".dev_mode.MainActivityDev"/>
+        </activity>
         <activity
             android:name=".dev_mode.ConnectionActivityDev"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_connection_dev_activity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".dev_mode.MainActivityDev">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".dev_mode.MainActivityDev"/>
+        </activity>
         <activity
             android:name=".dev_mode.MainActivityDev"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_main_dev_activity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
 
         <service
             android:name=".BluetoothLeService"

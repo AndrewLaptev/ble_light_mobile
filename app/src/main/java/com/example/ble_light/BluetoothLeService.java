@@ -44,6 +44,11 @@ public class BluetoothLeService extends Service {
     private static final int STATE_CONNECTING = 1;
     private static final int STATE_CONNECTED = 2;
 
+    public int reconnection_attempts = Integer.parseInt(MainActivity.sharedPreferences.getString(
+            getString(R.string.reconnections_attempts_key),
+            getString(R.string.reconnections_attempts_default)
+    ));
+
     public final static String ACTION_GATT_CONNECTED =
             "scanner_1.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
@@ -59,7 +64,6 @@ public class BluetoothLeService extends Service {
     public final static ParcelUuid PARCEL_FILTER_SERVICE_UUID = ParcelUuid.fromString(STR_FILTER_SERVICE_UUID);
 
     public class BluetoothGattExt {
-        private final int SUM_TRY_GATT_RECONNECTIONS = 10;
         private BluetoothGatt mBluetoothGatt;
         private String mBluetoothDeviceAddress;
         private int mConnectionState = STATE_DISCONNECTED;
@@ -85,7 +89,7 @@ public class BluetoothLeService extends Service {
                     } else {
                         int count_reconnections = 0;
                         boolean reconnect_result = false;
-                        while(!reconnect_result && count_reconnections != SUM_TRY_GATT_RECONNECTIONS) {
+                        while(!reconnect_result && count_reconnections != reconnection_attempts) {
                             Log.i(TAG, "Reconnection to GATT server");
                             reconnect_result = gatt.connect();
                             count_reconnections++;

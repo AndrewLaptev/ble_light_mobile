@@ -3,6 +3,7 @@ package com.example.ble_light;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -15,6 +16,7 @@ import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,8 +43,11 @@ import java.util.Objects;
 @SuppressLint("MissingPermission")
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
+    public static SharedPreferences sharedPreferences;
+
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
-    private static final int SCAN_PERIOD = 3000;
+
+    private static int scan_period;
     public static int rssiThreshold = 65;
 
     private SeekBar rssiSeekBar;
@@ -96,6 +101,9 @@ public class MainActivity extends MainActivityDev {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        loadSettings(sharedPreferences);
 
         getBluetoothAdapterAndLeScanner();
 
@@ -227,7 +235,7 @@ public class MainActivity extends MainActivityDev {
                         }
                     }
                 }
-            }, SCAN_PERIOD);
+            }, scan_period);
         } else {
             mBluetoothLeScanner.stopScan(scanCallback);
             mHandler.removeCallbacksAndMessages(null);
@@ -273,6 +281,7 @@ public class MainActivity extends MainActivityDev {
     protected void onResume() {
         super.onResume();
         stateFindView.setText(R.string.state_find_init);
+        loadSettings(sharedPreferences);
     }
 
     @Override
@@ -285,11 +294,23 @@ public class MainActivity extends MainActivityDev {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemChoose = item.getItemId();
-        if (itemChoose == R.id.dev_mode) {
+        if (itemChoose == R.id.dev_mode_item) {
             final Intent intent = new Intent(this, MainActivityDev.class);
             startActivity(intent);
             return true;
         }
+        if (itemChoose == R.id.settings_item) {
+            final Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadSettings(SharedPreferences sharedPreferences){
+        scan_period = Integer.parseInt(sharedPreferences.getString(
+                getString(R.string.scan_period_key),
+                getString(R.string.scan_period_default))
+        );
     }
 }

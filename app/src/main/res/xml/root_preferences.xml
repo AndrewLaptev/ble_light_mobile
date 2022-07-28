@@ -1,0 +1,54 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/light_manage_header">
+
+        <EditTextPreference
+            app:key="@string/access_token_key"
+            app:title="@string/access_token_title"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/access_token_default"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/color_temp_header">
+
+        <EditTextPreference
+            app:key="@string/effect_color_temp_min_key"
+            app:title="@string/effect_color_temp_min_title"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/effect_color_temp_min_default"/>
+
+        <EditTextPreference
+            app:key="@string/effect_color_temp_max_key"
+            app:title="@string/effect_color_temp_max_title"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/effect_color_temp_max_default"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/bluetooth_header">
+
+        <EditTextPreference
+            app:key="@string/scan_period_key"
+            app:title="@string/scan_period_title"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/scan_period_default"/>
+
+        <EditTextPreference
+            app:key="@string/reconnections_attempts_key"
+            app:title="@string/reconnections_attempts_title"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="@string/reconnections_attempts_default"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/system_header">
+        <Preference
+            app:title="@string/reset_settings_title"
+            app:key="@string/reset_settings_key"
+            app:summary="Reset all settings to default values" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

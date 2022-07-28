@@ -1,6 +1,7 @@
 package com.example.ble_light.dev_mode;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ble_light.BluetoothLeService;
+import com.example.ble_light.MainActivity;
 import com.example.ble_light.R;
 import com.example.ble_light.gatt_attr.AllGattCharacteristics;
 import com.example.ble_light.gatt_attr.AllGattServices;
@@ -40,7 +43,8 @@ public class ConnectionActivityDev extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    public static final int SUM_TRY_RECONNECTIONS = 10;
+
+    private int connection_attempts;
 
     private String mDeviceName;
     private String mDeviceAddress;
@@ -70,8 +74,8 @@ public class ConnectionActivityDev extends AppCompatActivity {
             boolean err_connection = mBluetoothLeService.connect(mDeviceAddress);
             int counter_connection = 0;
             if(!err_connection) {
-                while(!err_connection && counter_connection != SUM_TRY_RECONNECTIONS) {
-                    Log.i(TAG, "Reconnection to device");
+                while(!err_connection && counter_connection != connection_attempts) {
+                    Log.i(TAG, "Trying connection to device");
                     err_connection = mBluetoothLeService.connect(mDeviceAddress);
                     counter_connection++;
                 }
@@ -275,6 +279,13 @@ public class ConnectionActivityDev extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection_dev);
 
+        loadSettings(MainActivity.sharedPreferences);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -296,6 +307,7 @@ public class ConnectionActivityDev extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadSettings(MainActivity.sharedPreferences);
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
@@ -327,5 +339,12 @@ public class ConnectionActivityDev extends AppCompatActivity {
     public static String lookup(String uuid, String defaultName) {
         String name = attributes.get(uuid);
         return name == null ? defaultName : name;
+    }
+
+    private void loadSettings(SharedPreferences sharedPreferences){
+        connection_attempts = Integer.parseInt(sharedPreferences.getString(
+                getString(R.string.reconnections_attempts_key),
+                getString(R.string.reconnections_attempts_default)
+        ));
     }
 }

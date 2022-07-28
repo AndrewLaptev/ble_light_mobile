@@ -10,6 +10,7 @@
     <string name="esp_multiple_connection_ON">ON</string>
     <string name="esp_multiple_connection_OFF">OFF</string>
     <string name="activity_main_menu_dev_item">Developer mode</string>
+    <string name="activity_main_menu_settings_item">Settings</string>
     <string name="color_kelvin">%1$dK</string>
     <string name="color_bright">%1$d%%</string>
     <string name="color_placeholder">Tap color</string>
@@ -21,4 +22,49 @@
     <string name="state_find_init">Tap to find devices</string>
     <string name="rssi_dbm">&#8211;%1$d dBm</string>
     <string name="rssi_threshold_dsc">RSSI threshold</string>
+
+    <!-- Activity Titles -->
+    <string name="title_main_activity">BLight</string>
+    <string name="title_settings_activity">Settings</string>
+    <string name="title_light_manage_activity">Light manage</string>
+    <string name="title_main_dev_activity">Developer mode</string>
+    <string name="title_connection_dev_activity">Connection</string>
+    <string name="title_multiconnection_dev_activity">Multiconnection</string>
+
+    <!-- Preference Titles -->
+    <string name="light_manage_header">Light manage</string>
+    <string name="color_temp_header">Color temperature</string>
+    <string name="bluetooth_header">Bluetooth</string>
+    <string name="system_header">System</string>
+
+    <!-- Messages Preferences -->
+    <string name="access_token_title">Access token</string>
+    <string name="access_token_key">access_token</string>
+    <string name="access_token_default">12345</string>
+
+    <string name="effect_color_temp_min_title">Color temperature minimum</string>
+    <string name="effect_color_temp_min_key">effect_color_temp_min</string>
+    <string name="effect_color_temp_min_default">3400</string>
+
+    <string name="effect_color_temp_max_title">Color temperature maximum</string>
+    <string name="effect_color_temp_max_key">effect_color_temp_max</string>
+    <string name="effect_color_temp_max_default">5900</string>
+
+    <string name="scan_period_title">Scan period (ms)</string>
+    <string name="scan_period_key">scan_period</string>
+    <string name="scan_period_default">3000</string>
+
+    <string name="reconnections_attempts_title">Reconnection attempts</string>
+    <string name="reconnections_attempts_key">reconnections_attempts</string>
+    <string name="reconnections_attempts_default">10</string>
+
+    <string name="reset_settings_title">Reset</string>
+    <string name="reset_settings_key">reset</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

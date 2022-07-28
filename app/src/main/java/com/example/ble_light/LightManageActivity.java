@@ -2,6 +2,7 @@ package com.example.ble_light;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,13 +36,13 @@ import com.example.ble_light.light_picker.listeners.SimpleLightSelectionListener
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class LightManageActivity extends AppCompatActivity {
     private final static String TAG = LightManageActivity.class.getSimpleName();
-    private final String ACCESS_TOKEN = "12345"; // use another values!
     private final int AUTH_DELAY = 1000;
-    private final int EFFECT_COLOR_TEMP_MIN = 3400; // true values 2700 and 6500, but leds flicker
-    private final int EFFECT_COLOR_TEMP_MAX = 5900;
     private final int COLOR_ARC_ANGLE_RANGE = 120;
-    private final float COLOR_TEMP_ANGLE_STEP = (float)(EFFECT_COLOR_TEMP_MAX - EFFECT_COLOR_TEMP_MIN)
-            / COLOR_ARC_ANGLE_RANGE;
+
+    private String access_token;
+    private int effect_color_temp_min;
+    private int effect_color_temp_max;
+    private float color_temp_angle_step;
 
     public ArrayList<String> listDevicesAddresses = new ArrayList<String>();
     private ServiceConnection serviceConnection;
@@ -81,8 +83,8 @@ public class LightManageActivity extends AppCompatActivity {
                 boolean err_connection = mBluetoothLeService.multiconnect(listDevicesAddresses);
                 int counter_connection = 0;
                 if(!err_connection) {
-                    while(!err_connection && counter_connection != MultiConnectionActivityDev.SUM_TRY_RECONNECTIONS) {
-                        Log.i(TAG, "Reconnection to devices");
+                    while(!err_connection && counter_connection != MultiConnectionActivityDev.connection_attempts) {
+                        Log.i(TAG, "Trying connection to devices");
                         err_connection = mBluetoothLeService.multiconnect(listDevicesAddresses);
                         counter_connection++;
                     }
@@ -117,7 +119,7 @@ public class LightManageActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (!authApprove) {
-                            authDataSending(ACCESS_TOKEN);
+                            authDataSending(access_token);
                         }
                     }
                 }, AUTH_DELAY);
@@ -145,6 +147,9 @@ public class LightManageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadSettings(MainActivity.sharedPreferences);
+        color_temp_angle_step = (float)(effect_color_temp_max - effect_color_temp_min)
+                / COLOR_ARC_ANGLE_RANGE;
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
@@ -178,7 +183,16 @@ public class LightManageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_manage);
 
+        loadSettings(MainActivity.sharedPreferences);
+        color_temp_angle_step = (float)(effect_color_temp_max - effect_color_temp_min)
+                / COLOR_ARC_ANGLE_RANGE;
+
         stateConnectView = findViewById(R.id.stateConnectView);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent intent = getIntent();
         Bundle serAddresses = intent.getBundleExtra("BundleAddresses");
@@ -219,9 +233,9 @@ public class LightManageActivity extends AppCompatActivity {
                 if (id.equals("color_temp")) {
                     // angle of color temp acr from 60 to 300 in reverse order (equal 120)
                     if (angle > 0 && angle <= 60) {
-                        colorTemperature = (int)((420 - (angle + 360)) * COLOR_TEMP_ANGLE_STEP + EFFECT_COLOR_TEMP_MIN);
+                        colorTemperature = (int)((420 - (angle + 360)) * color_temp_angle_step + effect_color_temp_min);
                     } else {
-                        colorTemperature = (int)((420 - angle) * COLOR_TEMP_ANGLE_STEP + EFFECT_COLOR_TEMP_MIN);
+                        colorTemperature = (int)((420 - angle) * color_temp_angle_step + effect_color_temp_min);
                     }
                 } else if (id.equals("bright_temp")) {
                     if (brightness >= 0) {
@@ -239,5 +253,20 @@ public class LightManageActivity extends AppCompatActivity {
             }
         });
         initServiceConnection();
+    }
+
+    private void loadSettings(SharedPreferences sharedPreferences){
+        access_token = MainActivity.sharedPreferences.getString(
+                getString(R.string.access_token_key),
+                getString(R.string.access_token_default)
+        );
+        effect_color_temp_min = Integer.parseInt(MainActivity.sharedPreferences.getString(
+                getString(R.string.effect_color_temp_min_key),
+                getString(R.string.effect_color_temp_min_default)
+        ));
+        effect_color_temp_max = Integer.parseInt(MainActivity.sharedPreferences.getString(
+                getString(R.string.effect_color_temp_max_key),
+                getString(R.string.effect_color_temp_max_default)
+        ));
     }
 }

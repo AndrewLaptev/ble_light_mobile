@@ -2,6 +2,7 @@ package com.example.ble_light.dev_mode;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ble_light.BluetoothLeService;
+import com.example.ble_light.MainActivity;
 import com.example.ble_light.R;
 import com.example.ble_light.gatt_attr.AllGattCharacteristics;
 import com.example.ble_light.gatt_attr.AllGattServices;
@@ -39,7 +42,7 @@ import java.util.List;
 public class MultiConnectionActivityDev extends AppCompatActivity {
     private final static String TAG = ConnectionActivityDev.class.getSimpleName();
 
-    public static final int SUM_TRY_RECONNECTIONS = 10;
+    public static int connection_attempts;
 
     private TextView textViewState;
 
@@ -71,8 +74,8 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
                 boolean err_connection = mBluetoothLeService.multiconnect(listDevicesAddresses);
                 int counter_connection = 0;
                 if(!err_connection) {
-                    while(!err_connection && counter_connection != SUM_TRY_RECONNECTIONS) {
-                        Log.i(TAG, "Reconnection to devices");
+                    while(!err_connection && counter_connection != connection_attempts) {
+                        Log.i(TAG, "Trying connection to devices");
                         err_connection = mBluetoothLeService.multiconnect(listDevicesAddresses);
                         counter_connection++;
                     }
@@ -276,6 +279,13 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiconnection_dev);
 
+        loadSettings(MainActivity.sharedPreferences);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         Intent intent = getIntent();
         Bundle serAddresses = intent.getBundleExtra("BundleAddresses");
         listDevicesAddresses = (ArrayList<String>) serAddresses.getSerializable("Addresses");
@@ -291,6 +301,7 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadSettings(MainActivity.sharedPreferences);
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
@@ -320,4 +331,11 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
     }
 
     private static HashMap<String, String> attributes = new HashMap();
+
+    private void loadSettings(SharedPreferences sharedPreferences){
+        connection_attempts = Integer.parseInt(sharedPreferences.getString(
+                getString(R.string.reconnections_attempts_key),
+                getString(R.string.reconnections_attempts_default)
+        ));
+    }
 }
