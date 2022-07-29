@@ -5,7 +5,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-    <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" alt="Logo" width="125" height="125">
+    <img src="docs/images/logo.png" alt="Logo" width="125" height="125">
   </a>
 
 <h3 align="center">BLight</h3>
