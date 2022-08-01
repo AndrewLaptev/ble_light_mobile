@@ -78,14 +78,14 @@
 3) Если лампы будут найдены, то на экране отобразится панель управления:
 <p align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img9.png" alt="App screenshot 9" width="230" height="480">
+      <img src="docs/images/img3.png" alt="App screenshot 3" width="230" height="480">
   </a>
 </p>
 
 4) С помощью ползунков выбираем нужные значения цветовой температуры и яркости, после чего нажимаем кнопку `Send`, которая отправляет выбранный режим на все подключенные лампы:
 <p align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img12.png" alt="App screenshot 12" width="230" height="480">
+      <img src="docs/images/img4.png" alt="App screenshot 4" width="230" height="480">
   </a>
 </p>
 
@@ -98,35 +98,35 @@
 1) Чтобы перейти в продвинутый режим, нужно на главном экране приложения справа сверху нажать значок выпадающего меню и выбрать пункт `Developer mode`:
 <p align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img13.png" alt="App screenshot 13" width="230" height="480">
+      <img src="docs/images/img5.png" alt="App screenshot 5" width="230" height="480">
   </a>
 </p>
 
 2) После нажатия кнопки `Scan` на экране появится список из всех доступных Bluetooth устройств поблизости с отображением их имен, MAC-адресов и уровней RSSI:
 <p align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img4.png" alt="App screenshot 4" width="230" height="480">
+      <img src="docs/images/img6.png" alt="App screenshot 6" width="230" height="480">
   </a>
 </p>
 
 3) При нажатии на устройство из списка отобразится диалоговое окное, которое содержит имя устройства, его адрес, тип Bluetooth устройства, а также конопки подключения и выхода из диалогового окна:
 <p align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img5.png" alt="App screenshot 5" width="230" height="480">
+      <img src="docs/images/img7.png" alt="App screenshot 7" width="230" height="480">
   </a>
 </p>
 
 4) После удачного подключения к устройству на экране отобразятся все его сервисы и характеристики. Узнать значения характеристики можно нажав на нее, также отобразится тип характеристики во всплывающем сообщении (`Readable`, `Writeble` и т.д.). Если характеристика `Writeble`, то появится диалоговое окно для записи значения:
 <p align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img6.png" alt="App screenshot 6" width="230" height="480">
+      <img src="docs/images/img8.png" alt="App screenshot 8" width="230" height="480">
   </a>
 </p>
 
 5) В интерфейсе поиска устройств рядом с кнопкой `Scan` также есть еще кнопки `Filter on/off` и `Multiple connect`. Первая из них включает фильтр при поиске устройств и отображает только те устройства, на которых установлена заранее настроенная прошивка BLightESP32, вторая кнопка запускает множественное подключение ко всем найденным устройствам с прошивкой BLightESP32:
 <p align="center">
   <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img8.png" alt="App screenshot 8" width="230" height="480">
+      <img src="docs/images/img9.png" alt="App screenshot 9" width="230" height="480">
   </a>
 </p>
 
