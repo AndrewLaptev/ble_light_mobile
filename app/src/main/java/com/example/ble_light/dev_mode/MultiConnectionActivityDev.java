@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ble_light.BluetoothLeService;
-import com.example.ble_light.MainActivity;
 import com.example.ble_light.R;
 import com.example.ble_light.gatt_attr.AllGattCharacteristics;
 import com.example.ble_light.gatt_attr.AllGattServices;

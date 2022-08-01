@@ -101,7 +101,6 @@ public class MainActivity extends MainActivityDev {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         loadSettings();
 
         getBluetoothAdapterAndLeScanner();

@@ -13,8 +13,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import java.util.Objects;
-
 
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class SettingsActivity extends AppCompatActivity {
