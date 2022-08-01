@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -18,6 +19,7 @@ import android.os.ParcelUuid;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.preference.PreferenceManager;
 
 import com.example.ble_light.gatt_attr.AllGattServices;
 
@@ -44,10 +46,7 @@ public class BluetoothLeService extends Service {
     private static final int STATE_CONNECTING = 1;
     private static final int STATE_CONNECTED = 2;
 
-    public int reconnection_attempts = Integer.parseInt(MainActivity.sharedPreferences.getString(
-            getString(R.string.reconnections_attempts_key),
-            getString(R.string.reconnections_attempts_default)
-    ));
+    public int reconnection_attempts;
 
     public final static String ACTION_GATT_CONNECTED =
             "scanner_1.ACTION_GATT_CONNECTED";
@@ -203,6 +202,12 @@ public class BluetoothLeService extends Service {
         }
     }
     private final IBinder mBinder = new LocalBinder();
+
+    @Override
+    public void onCreate() {
+        loadSettings();
+        super.onCreate();
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -425,5 +430,15 @@ public class BluetoothLeService extends Service {
     public List<BluetoothGattService> getSupportedGattServices() {
         if (listBluetoothGattsExt.isEmpty()) return null;
         return listBluetoothGattsExt.get(0).getBluetoothGatt().getServices(); // all devices have equals services
+    }
+
+    private void loadSettings() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        reconnection_attempts = Integer.parseInt(
+                sharedPreferences.getString(
+                        getString(R.string.reconnections_attempts_key),
+                        getString(R.string.reconnections_attempts_default)
+                )
+        );
     }
 }

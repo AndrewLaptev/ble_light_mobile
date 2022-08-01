@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -279,7 +280,7 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiconnection_dev);
 
-        loadSettings(MainActivity.sharedPreferences);
+        loadSettings();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -301,7 +302,7 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadSettings(MainActivity.sharedPreferences);
+        loadSettings();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
@@ -332,7 +333,8 @@ public class MultiConnectionActivityDev extends AppCompatActivity {
 
     private static HashMap<String, String> attributes = new HashMap();
 
-    private void loadSettings(SharedPreferences sharedPreferences){
+    private void loadSettings(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         connection_attempts = Integer.parseInt(sharedPreferences.getString(
                 getString(R.string.reconnections_attempts_key),
                 getString(R.string.reconnections_attempts_default)

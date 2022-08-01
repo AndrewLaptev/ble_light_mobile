@@ -11,6 +11,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+
+import java.util.Objects;
 
 
 @RequiresApi(api = Build.VERSION_CODES.S)
@@ -48,7 +51,8 @@ public class SettingsActivity extends AppCompatActivity {
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.clear().apply();
                                     setPreferencesFromResource(R.xml.root_preferences, rootKey);
                                 }

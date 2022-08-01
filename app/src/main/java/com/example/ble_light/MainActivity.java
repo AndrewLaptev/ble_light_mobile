@@ -43,7 +43,6 @@ import java.util.Objects;
 @SuppressLint("MissingPermission")
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
-    public static SharedPreferences sharedPreferences;
 
     private static final int ACCESS_BLUETOOTH_PERMISSION = 85;
 
@@ -102,8 +101,8 @@ public class MainActivity extends MainActivityDev {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        loadSettings(sharedPreferences);
+//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        loadSettings();
 
         getBluetoothAdapterAndLeScanner();
 
@@ -281,7 +280,7 @@ public class MainActivity extends MainActivityDev {
     protected void onResume() {
         super.onResume();
         stateFindView.setText(R.string.state_find_init);
-        loadSettings(sharedPreferences);
+        loadSettings();
     }
 
     @Override
@@ -307,7 +306,8 @@ public class MainActivity extends MainActivityDev {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadSettings(SharedPreferences sharedPreferences){
+    private void loadSettings(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         scan_period = Integer.parseInt(sharedPreferences.getString(
                 getString(R.string.scan_period_key),
                 getString(R.string.scan_period_default))

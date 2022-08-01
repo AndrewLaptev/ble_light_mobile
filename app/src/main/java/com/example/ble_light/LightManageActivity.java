@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -147,7 +148,7 @@ public class LightManageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadSettings(MainActivity.sharedPreferences);
+        loadSettings();
         color_temp_angle_step = (float)(effect_color_temp_max - effect_color_temp_min)
                 / COLOR_ARC_ANGLE_RANGE;
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
@@ -183,7 +184,7 @@ public class LightManageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_manage);
 
-        loadSettings(MainActivity.sharedPreferences);
+        loadSettings();
         color_temp_angle_step = (float)(effect_color_temp_max - effect_color_temp_min)
                 / COLOR_ARC_ANGLE_RANGE;
 
@@ -255,16 +256,17 @@ public class LightManageActivity extends AppCompatActivity {
         initServiceConnection();
     }
 
-    private void loadSettings(SharedPreferences sharedPreferences){
-        access_token = MainActivity.sharedPreferences.getString(
+    private void loadSettings(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        access_token = sharedPreferences.getString(
                 getString(R.string.access_token_key),
                 getString(R.string.access_token_default)
         );
-        effect_color_temp_min = Integer.parseInt(MainActivity.sharedPreferences.getString(
+        effect_color_temp_min = Integer.parseInt(sharedPreferences.getString(
                 getString(R.string.effect_color_temp_min_key),
                 getString(R.string.effect_color_temp_min_default)
         ));
-        effect_color_temp_max = Integer.parseInt(MainActivity.sharedPreferences.getString(
+        effect_color_temp_max = Integer.parseInt(sharedPreferences.getString(
                 getString(R.string.effect_color_temp_max_key),
                 getString(R.string.effect_color_temp_max_default)
         ));
