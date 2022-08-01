@@ -61,89 +61,89 @@
 <details>
 <summary><b>Step-by-step instruction</b></summary>
 
-### Setup
+  ### Setup
 
-Перед подключением приложения к лампам с прошивкой BLightESP32 можно произвести настройку в разделе `Settings` (выпадающее меню на главном экране):
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img10.png" alt="App screenshot 10" width="230" height="480">
-  </a>
-</p>
+  Перед подключением приложения к лампам с прошивкой BLightESP32 можно произвести настройку в разделе `Settings` (выпадающее меню на главном экране):
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img10.png" alt="App screenshot 10" width="230" height="480">
+    </a>
+  </p>
 
-### User mode
+  ### User mode
 
-Для использования приложения вам нужно будет дать разрешение на доступ приложения к Bluetooth и вашему местоположению на устройстве
+  Для использования приложения вам нужно будет дать разрешение на доступ приложения к Bluetooth и вашему местоположению на устройстве
 
-1) Запускаем приложение:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img1.png" alt="App screenshot 1" width="230" height="480">
-  </a>
-</p>
+  1) Запускаем приложение:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img1.png" alt="App screenshot 1" width="230" height="480">
+    </a>
+  </p>
 
-2) Выставляем ползунок `RSSI threshold` на необходимое значение, которое измеряется в `dBm` и интерпретирует расстояние до лампы. Чем больше по модулю будет показание `RSSI threshold`, тем больше будет область поиска ламп. После чего нажимаем кнопку поиска:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img2.png" alt="App screenshot 2" width="230" height="480">
-  </a>
-</p>
+  2) Выставляем ползунок `RSSI threshold` на необходимое значение, которое измеряется в `dBm` и интерпретирует расстояние до лампы. Чем больше по модулю будет показание `RSSI threshold`, тем больше будет область поиска ламп. После чего нажимаем кнопку поиска:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img2.png" alt="App screenshot 2" width="230" height="480">
+    </a>
+  </p>
 
-3) Если лампы будут найдены, то на экране отобразится панель управления:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img3.png" alt="App screenshot 3" width="230" height="480">
-  </a>
-</p>
+  3) Если лампы будут найдены, то на экране отобразится панель управления:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img3.png" alt="App screenshot 3" width="230" height="480">
+    </a>
+  </p>
 
-4) С помощью ползунков выбираем нужные значения цветовой температуры и яркости, после чего нажимаем кнопку `Send`, которая отправляет выбранный режим на все подключенные лампы:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img4.png" alt="App screenshot 4" width="230" height="480">
-  </a>
-</p>
+  4) С помощью ползунков выбираем нужные значения цветовой температуры и яркости, после чего нажимаем кнопку `Send`, которая отправляет выбранный режим на все подключенные лампы:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img4.png" alt="App screenshot 4" width="230" height="480">
+    </a>
+  </p>
 
-5) Чтобы отключиться от ламп, достаточно просто перейти на главный экран приложения через кнопку действия мобильного телефона `Назад`
+  5) Чтобы отключиться от ламп, достаточно просто перейти на главный экран приложения через кнопку действия мобильного телефона `Назад`
 
-### Developer mode
+  ### Developer mode
 
-В приложении также имеется продвинутый режим использования, который позволяет видеть все ближайшие устройства Bluetooth, а также их RSSI в реальном времени, сервисы и значения характеристик
+  В приложении также имеется продвинутый режим использования, который позволяет видеть все ближайшие устройства Bluetooth, а также их RSSI в реальном времени, сервисы и значения характеристик
 
-1) Чтобы перейти в продвинутый режим, нужно на главном экране приложения справа сверху нажать значок выпадающего меню и выбрать пункт `Developer mode`:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img5.png" alt="App screenshot 5" width="230" height="480">
-  </a>
-</p>
+  1) Чтобы перейти в продвинутый режим, нужно на главном экране приложения справа сверху нажать значок выпадающего меню и выбрать пункт `Developer mode`:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img5.png" alt="App screenshot 5" width="230" height="480">
+    </a>
+  </p>
 
-2) После нажатия кнопки `Scan` на экране появится список из всех доступных Bluetooth устройств поблизости с отображением их имен, MAC-адресов и уровней RSSI:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img6.png" alt="App screenshot 6" width="230" height="480">
-  </a>
-</p>
+  2) После нажатия кнопки `Scan` на экране появится список из всех доступных Bluetooth устройств поблизости с отображением их имен, MAC-адресов и уровней RSSI:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img6.png" alt="App screenshot 6" width="230" height="480">
+    </a>
+  </p>
 
-3) При нажатии на устройство из списка отобразится диалоговое окное, которое содержит имя устройства, его адрес, тип Bluetooth устройства, а также конопки подключения и выхода из диалогового окна:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img7.png" alt="App screenshot 7" width="230" height="480">
-  </a>
-</p>
+  3) При нажатии на устройство из списка отобразится диалоговое окное, которое содержит имя устройства, его адрес, тип Bluetooth устройства, а также конопки подключения и выхода из диалогового окна:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img7.png" alt="App screenshot 7" width="230" height="480">
+    </a>
+  </p>
 
-4) После удачного подключения к устройству на экране отобразятся все его сервисы и характеристики. Узнать значения характеристики можно нажав на нее, также отобразится тип характеристики во всплывающем сообщении (`Readable`, `Writeble` и т.д.). Если характеристика `Writeble`, то появится диалоговое окно для записи значения:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img8.png" alt="App screenshot 8" width="230" height="480">
-  </a>
-</p>
+  4) После удачного подключения к устройству на экране отобразятся все его сервисы и характеристики. Узнать значения характеристики можно нажав на нее, также отобразится тип характеристики во всплывающем сообщении (`Readable`, `Writeble` и т.д.). Если характеристика `Writeble`, то появится диалоговое окно для записи значения:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img8.png" alt="App screenshot 8" width="230" height="480">
+    </a>
+  </p>
 
-5) В интерфейсе поиска устройств рядом с кнопкой `Scan` также есть еще кнопки `Filter on/off` и `Multiple connect`. Первая из них включает фильтр при поиске устройств и отображает только те устройства, на которых установлена заранее настроенная прошивка BLightESP32, вторая кнопка запускает множественное подключение ко всем найденным устройствам с прошивкой BLightESP32:
-<p align="center">
-  <a href="https://github.com/AndrewLaptev/ble_light_mobile">
-      <img src="docs/images/img9.png" alt="App screenshot 9" width="230" height="480">
-  </a>
-</p>
+  5) В интерфейсе поиска устройств рядом с кнопкой `Scan` также есть еще кнопки `Filter on/off` и `Multiple connect`. Первая из них включает фильтр при поиске устройств и отображает только те устройства, на которых установлена заранее настроенная прошивка BLightESP32, вторая кнопка запускает множественное подключение ко всем найденным устройствам с прошивкой BLightESP32:
+  <p align="center">
+    <a href="https://github.com/AndrewLaptev/ble_light_mobile">
+        <img src="docs/images/img9.png" alt="App screenshot 9" width="230" height="480">
+    </a>
+  </p>
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+  <p align="right">(<a href="#top">back to top</a>)</p>
 </details>
 
 <!-- GETTING STARTED -->
@@ -169,6 +169,22 @@
 <!-- DOCUMENTATION -->
 ## Documentation
 
+В данном разделе описаны функциональные модули приложени и классы (Activity), из которых они состоят. 
+
+Рассматриваются только методы, в которых содержится специфическая для данного приложения логика, т.е. стандартные методы `onCreate()`, `onResume()` и т.п., не несущие в себе специализированной логики, описаны не будут. 
+
+Также не рассматриваются методы и функции отрисовки интерфейса приложения, т.к. это простой базовый интерфейс, сделанный для прототипа.
+
+<details>
+<summary><b>ble_light</b></summary>
+  Данный функциональный модуль является основным в работе приложения.
+  
+  ### MainActivity
+  Главный класс приложения, в нем находится entrypoint, доступ к настройкам, продвинутому режиму и именно от него запускается сканирование устройств с последующим подключением
+  
+  #### Protected методы:
+  * `onCreate()` - подгружает настройки из `root_preferences.xml`, инициализирует `BluetoothAdapter` и `BluetoothLeScanner`, а также права доступа для Bluetooth и проверку на поддержку BLE.
+  * `onResume()` - 
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
