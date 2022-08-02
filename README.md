@@ -29,6 +29,26 @@
 * Android 10 и выше
 * Bluetooth 5.0
 
+<!-- GETTING STARTED -->
+## Getting Started
+
+Здесь находится описание того, как можно установить и запустить приложение из исходных файлов
+
+### Prerequisites
+
+* Android Studio (2021.1.1 и выше)
+
+### Installation
+
+1. Клонируем репозиторий
+   ```bash
+   git clone https://github.com/AndrewLaptev/ble_light_mobile
+   ```
+2. Открываем проект в Android Studio
+3. Выполняем сборку проекта и закачиваем его на телефон (в эмуляторе приложение работать не будет)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 <!-- USAGE -->
 ## Usage
 
@@ -119,26 +139,6 @@
 
   <p align="right">(<a href="#top">back to top</a>)</p>
 </details>
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-Здесь находится описание того, как можно установить и запустить приложение из исходных файлов
-
-### Prerequisites
-
-* Android Studio (2021.1.1 и выше)
-
-### Installation
-
-1. Клонируем репозиторий
-   ```bash
-   git clone https://github.com/AndrewLaptev/ble_light_mobile
-   ```
-2. Открываем проект в Android Studio
-3. Выполняем сборку проекта и закачиваем его на телефон (в эмуляторе приложение работать не будет)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- DOCUMENTATION -->
 ## Documentation
