@@ -278,13 +278,17 @@
   
 <details>
   <summary><h3>light_picker</h3></summary>
-  Данный модуль содержит в себе реализацию графического интерфейса для выбора светового режима в пользовательском режиме (User mode) работы приложения. Реализация является немного видоизмененной библиотекой <a href="https://github.com/Madrapps/Pikolo"> Pikolo </a>
+  Данный модуль содержит в себе реализацию графического интерфейса для выбора светового режима в пользовательском режиме (User mode) работы приложения. Реализация модификацией библиотеки <a href="https://github.com/Madrapps/Pikolo"> Pikolo </a>
 
 </details>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+Приложение разработано в рамках НИР "Разработка механизмов проекцирования процессов жизнедеятельности пользователей в экосистему их цифровых ассистентов" №621308
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
