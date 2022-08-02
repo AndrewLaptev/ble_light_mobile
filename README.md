@@ -8,7 +8,7 @@
     <img src="docs/images/logo.png" alt="Logo" width="125" height="125">
   </a>
 
-<h2 align="center">BLight</h2>
+<h3 align="center">BLight</h3>
 
   <p align="center">
     Программный модуль локализации владельцев цифровых ассистентов по данным мобильных устройств
