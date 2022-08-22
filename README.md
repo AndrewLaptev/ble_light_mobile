@@ -11,7 +11,7 @@
 <h3 align="center">BLight</h3>
 
   <p align="center">
-    Программный модуль локализации владельцев цифровых ассистентов по данным мобильных устройств
+    Software module for localization of owners of digital assistants according to mobile device data
   </p>
 </div>
 
@@ -19,33 +19,33 @@
 <!-- ABOUT THE PROJECT -->
 ## About
 
-Данное мобильное приложение предназначено для ручного беспроводного управления сразу несколькими ближайшими умными лампами в определенной области действия, которая задается пользователем. В качестве управляющего контроллера лампы используется микроконтроллер ESP32 с прошивкой [BLightESP32](https://github.com/AndrewLaptev/ble_light_esp32). Управление осуществляется через изменение цветовой температуры ламп, а также их яркости.
+This mobile application is designed for manual wireless control of several nearby smart lamps at once in a certain area of action, which is set by the user. The ESP 32 microcontroller with firmware [BLightESP32](https://github.com/AndrewLaptev/ble_light_esp32) is used as the control controller of the lamp. The control is carried out by changing the color temperature of the lamps, as well as their brightness.
 
 ### Built With
 * [![Android Studio][android-studio-shield]][android-studio-url]
 * [![Pikolo][pikolo-shield]][pikolo-url]
 
 ### Requirements
-* Android 10 и выше
+* Android 10 and higher
 * Bluetooth 5.0
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Здесь находится описание того, как можно установить и запустить приложение из исходных файлов
+Here is a description of how you can install and run the application from the source files
 
 ### Prerequisites
 
-* Android Studio (2021.1.1 и выше)
+* Android Studio (2021.1.1 and higher)
 
 ### Installation
 
-1. Клонируем репозиторий
+1. Cloning the repository
    ```bash
    git clone https://github.com/AndrewLaptev/ble_light_mobile
    ```
-2. Открываем проект в Android Studio
-3. Выполняем сборку проекта и закачиваем его на телефон (в эмуляторе приложение работать не будет)
+2. Opening the project in Android Studio
+3. We build the project and upload it to the phone (the application will not work in the emulator)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -57,7 +57,7 @@
 
   ### Setup
 
-  Перед подключением приложения к лампам с прошивкой BLightESP32 можно произвести настройку в разделе `Settings` (выпадающее меню на главном экране):
+  Before connecting the application to lamps with BLightESP32 firmware, you can configure it in the `Settings` section (drop-down menu on the main screen):
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img10.png" alt="App screenshot 10" width="230" height="480">
@@ -66,71 +66,71 @@
 
   ### User mode
 
-  Для использования приложения вам нужно будет дать разрешение на доступ приложения к Bluetooth и вашему местоположению на устройстве
+  To use the app, you will need to give permission for the app to access Bluetooth and your location on the device
 
-  1) Запускаем приложение:
+  1) Launching the application:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img1.png" alt="App screenshot 1" width="230" height="480">
     </a>
   </p>
 
-  2) Выставляем ползунок `RSSI threshold` на необходимое значение, которое измеряется в `dBm` и интерпретирует расстояние до лампы. Чем больше по модулю будет показание `RSSI threshold`, тем больше будет область поиска ламп. После чего нажимаем кнопку поиска:
+  2) We set the slider `RSSI threshold` to the required value, which is measured in `dBm` and interprets the distance to the lamp. The larger the `RSSI threshold` reading is modulo, the larger the lamp search area will be. Then click the search button:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img2.png" alt="App screenshot 2" width="230" height="480">
     </a>
   </p>
 
-  3) Если лампы будут найдены, то на экране отобразится панель управления:
+  3) If the lamps are found, the control panel will be displayed on the screen:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img3.png" alt="App screenshot 3" width="230" height="480">
     </a>
   </p>
 
-  4) С помощью ползунков выбираем нужные значения цветовой температуры и яркости, после чего нажимаем кнопку `Send`, которая отправляет выбранный режим на все подключенные лампы:
+  4) Using the sliders, select the desired values of color temperature and brightness, then press the `Send` button, which sends the selected mode to all connected lamps:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img4.png" alt="App screenshot 4" width="230" height="480">
     </a>
   </p>
 
-  5) Чтобы отключиться от ламп, достаточно просто перейти на главный экран приложения через кнопку действия мобильного телефона `Назад`
+  5) To disconnect from the lamps, just go to the main screen of the application via the mobile phone action button `Back`
 
   ### Developer mode
 
-  В приложении также имеется продвинутый режим использования, который позволяет видеть все ближайшие устройства Bluetooth, а также их RSSI в реальном времени, сервисы и значения характеристик
+  The application also has an advanced usage mode that allows you to see all the nearest Bluetooth devices, as well as their RSSI in real time, services and performance values.
 
-  1) Чтобы перейти в продвинутый режим, нужно на главном экране приложения справа сверху нажать значок выпадающего меню и выбрать пункт `Developer mode`:
+  1) To switch to advanced mode, you need to click the drop-down menu icon on the top right of the main application screen and select `Developer mode`:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img5.png" alt="App screenshot 5" width="230" height="480">
     </a>
   </p>
 
-  2) После нажатия кнопки `Scan` на экране появится список из всех доступных Bluetooth устройств поблизости с отображением их имен, MAC-адресов и уровней RSSI:
+  2) After pressing the `Scan` button, a list of all available Bluetooth devices nearby will appear on the screen with their names, MAC addresses and RSSI levels displayed:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img6.png" alt="App screenshot 6" width="230" height="480">
     </a>
   </p>
 
-  3) При нажатии на устройство из списка отобразится диалоговое окное, которое содержит имя устройства, его адрес, тип Bluetooth устройства, а также конопки подключения и выхода из диалогового окна:
+  3) Clicking on a device from the list will display a dialog box that contains the name of the device, its address, the type of Bluetooth device, as well as the connection and exit buttons of the dialog box:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img7.png" alt="App screenshot 7" width="230" height="480">
     </a>
   </p>
 
-  4) После удачного подключения к устройству на экране отобразятся все его сервисы и характеристики. Узнать значения характеристики можно нажав на нее, также отобразится тип характеристики во всплывающем сообщении (`Readable`, `Writeble` и т.д.). Если характеристика `Writeble`, то появится диалоговое окно для записи значения:
+  4) After successfully connecting to the device, all its services and characteristics will be displayed on the screen. You can find out the values of the characteristic by clicking on it, the type of characteristic will also be displayed in a pop-up message (`Readable`, `Writeble`, etc.). If the characteristic is `Writeble`, a dialog box will appear to record the value:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img8.png" alt="App screenshot 8" width="230" height="480">
     </a>
   </p>
 
-  5) В интерфейсе поиска устройств рядом с кнопкой `Scan` также есть еще кнопки `Filter on/off` и `Multiple connect`. Первая из них включает фильтр при поиске устройств и отображает только те устройства, на которых установлена заранее настроенная прошивка BLightESP32, вторая кнопка запускает множественное подключение ко всем найденным устройствам с прошивкой BLightESP32:
+  5) In the device search interface, there are also `Filter on/off` and `Multiple connect` buttons next to the `Scan` button. The first of them includes a filter when searching for devices and displays only those devices on which the pre-configured BLightESP32 firmware is installed, the second button starts multiple connection to all found devices with BLightESP32 firmware:
   <p align="center">
     <a href="https://github.com/AndrewLaptev/ble_light_mobile">
         <img src="docs/images/img9.png" alt="App screenshot 9" width="230" height="480">
@@ -143,112 +143,112 @@
 <!-- DOCUMENTATION -->
 ## Documentation
 
-В данном разделе описаны функциональные модули приложени и классы (Activity), из которых они состоят. 
+This section describes the functional modules of the application and the classes (Activity) that they consist of.
 
-Рассматриваются только методы, в которых содержится специфическая для данного приложения логика, т.е. стандартные методы `onCreate()`, `onResume()` и т.п., **не несущие** в себе специфической логики, описаны не будут. 
+Only methods that contain application-specific logic are considered, i.e. standard methods `onCreate()`, `onResume()`, etc., **not carrying** specific logic in themselves, will not be described.
 
-Не рассматриваются подробно классы, методы и функции (или часть метода) отрисовки интерфейса приложения, т.к. это простой базовый интерфейс, сделанный для прототипа.
+Classes, methods and functions (or part of the method) of rendering the application interface are not considered in detail, because this is a simple basic interface made for a prototype.
 
 <details>
   <summary><h3>ble_light</h3></summary>
-  Данный функциональный модуль является основным в работе приложения и реализует пользовательский (User mode) режим работы приложения.
+  This functional module is the main one in the operation of the application and implements the user (User mode) mode of operation of the application.
   
   #### MainActivity
-  Главный класс приложения, в нем находится entrypoint, доступ к настройкам, продвинутому режиму и именно от него запускается сканирование устройств с последующим подключением
+  The main class of the application, it contains entrypoint, access to settings, advanced mode, and it is from it that device scanning is started with subsequent connection
   
-  *Protected* методы:
-  * `onCreate` - вызывает приватные методы для инициализации, настройки и сканировании Bluetooh, а также права доступа для Bluetooth и проверку на поддержку BLE.
+  *Protected* methods:
+  * `onCreate` - calls private methods for initializing, configuring and scanning Bluetooth, as well as access rights for Bluetooth and checking for BLE support.
   
-  *Private* методы:
-  * `getBluetoothAdapterAndLeScanner` - инициализирует объекты классов `BluetoothAdapter` и `BluetoothLeScanner`
-  * `scanBleDevices` - запускает сканирование устройств Bluetooth с определенным `scan_period` временем, передает список адресов устройств в класс `LightManageActivity`
-  * `meanRSSI` - высчитывает среднее значение силы сигнала RSSI по вхожному массиву значений
-  * `loadSettings` - подгружает настройки (`scan_period`) из `root_preferences.xml`
+  *Private* methods:
+  * `getBluetoothAdapterAndLeScanner` - initializes objects of the `Bluetooth Adapter` and `Bluetooth Le Scanner` classes
+  * `scanBleDevices` - starts scanning Bluetooth devices with a certain `scan_period` time, passes a list of device addresses to the `LightManageActivity` class
+  * `meanRSSI` - calculates the average value of the RSSI signal strength from the input array of values
+  * `loadSettings` - loads the settings (`scan_period`) from `root_preferences.xml`
   
-  *Inner* классы:
-  * `Kalman` - класс, реализующий фильтр Калмана, имеет один *public* метод `filter(int init_rssi, ArrayList<Integer> rssi_list)`, который непосредственно производит фильтрацию
+  *Inner* classes:
+  * `Kalman` - the class implementing the Kalman filter has one *public* method `filter(int init_rssi, ArrayList<Integer> rssi_list)`, which directly performs filtering
   
   #### BluetoothLeService
-  Класс, содержащий в себе все необходимые методы для создания и управления Bluetooth соеднинений.
+  A class containing all the necessary methods for creating and managing Bluetooth connections.
   
-  *Public* методы:
-  * `initialize` - инициализирует объект класса `BluetoothAdapter`
-  * `connect` - выполнеяет подключение к GATT устройства Bluetooth по указанному MAC адресу
-  * `multiconnect` - выполняет подключение сразу в нескольким GATT устройств Bluetooth по указанному списку MAC адресов
-  * `disconnect` - производит отключение от одного или сразу нескольких Bluetooth устройств
-  * `сlose` - закрывает соединение/соединения GATT устройств Bluetooth
-  * `readCharacteristic` - производит чтение значения определенной характеристики GATT одного Bluetooth устройства или сразу нескольких
-  * `writeCharacteristic` - производит запись значения в определенную характеристику GATT одного Bluetooth устройства или сразу нескольких
-  * `setCharacteristicNotification` - устанавливает или отключает уведомление на определенную характеристику GATT одного Bluetooth устройства или сразу нескольких
-  * `getSupportedGattServices` - возвращает список доступных сервисов GATT Bluetooth устройства
+  *Public* methods:
+  * `initialize` - initializes an object of the `BluetoothAdapter` class
+  * `connect` - connects a Bluetooth device to GATT at the specified MAC address
+  * `multiconnect` - connects to several GATT Bluetooth devices at once using the specified list of MAC addresses
+  * `disconnect` - disconnects from one or several Bluetooth devices at once
+  * `сlose` - closes the connection/GATT connections of Bluetooth devices
+  * `readCharacteristic` - reads the value of a certain GATT characteristic of one Bluetooth device or several at once
+  * `writeCharacteristic` - writes a value to a specific GATT characteristic of one Bluetooth device or several at once
+  * `setCharacteristicNotification` - sets or disables notification for a specific GATT characteristic of one Bluetooth device or several at once
+  * `getSupportedGattServices` - returns a list of available GATT Bluetooth device services
   
-  *Private* методы:
-  * `loadSettings` - подгружает настройки (`reconnection_attempts`) из `root_preferences.xml`
+  *Private* methods:
+  * `loadSettings` - loads the settings (`reconnection_attempts`) from `root_preferences.xml`
   
-  *Inner* классы:
-  * `BluetoothGattExt` - класс, являющийся расширением класса `BluetoothGatt`. Более тесно связывает Bluetooth устройство и объект `BluetoothGatt`, т.к. стандартный `BluetoothGatt` может подключаться к нескольким устройствам, что не обеспечивает обмена данными сразу с несколькими устройствами
+  *Inner* classes:
+  * `BluetoothGattExt` - class that is an extension of the `BluetoothGatt` class. Connects the Bluetooth device and the `BluetoothGatt` object more closely, because the standard `BluetoothGatt` can connect to multiple devices, which does not provide data exchange with multiple devices at once.
 
   #### LightManageActivity
-  Класс, отвечающий за аутентификацию и управление световыми режимами на подключенном Bluetooth устройстве (сервисы `Authentication` и `Light manage`). Аутентификация нужна только для доступа к записи значений в характеристику `Level of light` для управления световыми режимами, т.е. можно подключиться к GATT устройства BLightESP32 и увидеть его сервисы и характеристики, но, без аутентификации (`access_token`) через характеристику `Authorization data`, будет невозможно управлять световым режимом.
+  A class responsible for authentication and control of light modes on a connected Bluetooth device (services `Authentication` and `Light manage`). Authentication is only needed to access the values entry in the `Level of light` characteristic for controlling light modes, i.e. you can connect to the GATT of the BLightESP32 device and see its services and characteristics, but without authentication (`access_token`) through the `Authorization data` characteristic, it will be impossible to control the light mode.
   
-  *Protected* методы:
-  * `onCreate` - производит начальные вычисления шага изменения светового режима на основе подруженных настроек, инициаилизирует визуальный интерфейс выбора режима, производит инициализацию подключения к Bluetooth устройствам BLightESP32
+  *Protected* methods:
+  * `onCreate` - performs initial calculations of the step of changing the light mode based on the selected settings, initializes the visual interface for selecting the mode, initializes the connection to Bluetooth devices BLightESP32
   
-  *Private* методы:
-  * `initServiceConnection` - производит подключение к Bluetooth устройствам, также определяет метод обратного вызова для переподключения, если подключиться с первого раза не получается
-  * `authDataSending` - передает аутентификационные данные (`access_token`) в характеристику `Authorization data` для будущего доступа к записи значений светового режима в характеристику `Level of light`
-  * `loadSettings` - подгружает настройки (`access_token`, `effect_color_temp_min_key`, `effect_color_temp_max_key`) из `root_preferences.xml`
+  *Private* methods:
+  * `initServiceConnection` - connects to Bluetooth devices, also defines a callback method for reconnecting if it is not possible to connect the first time
+  * `authDataSending` - passes authentication data (`access_token`) to the `Authorization data` characteristic for future access to recording light mode values in the `Level of light` characteristic
+  * `loadSettings` - loads the settings (`access_token`, `effect_color_temp_min_key`, `effect_color_temp_max_key`) from `root_preferences.xml`
  
   #### SettingsActivity
-  Класс, реализующий интерфейс взаимодействия пользователя с настройками приложения через `root_preferences.xml`, позволяет сброить настройки до значений по умолчанию. В основном этот класс содержит визуальный функционал, поэтому подробно описан не будет.
+  A class that implements an interface for user interaction with application settings via `root_preferences.xml`, allows you to reset the settings to the default values. Basically, this class contains visual functionality, so it will not be described in detail.
 
 </details>
 
 
 <details>
   <summary><h3>dev_mode</h3></summary>
-  Данный модуль реализует продвинутый режим (Developer mode) использования приложения.
+  This module implements the advanced mode (Developer mode) of using the application.
   
   #### MainActivityDev
-  Главный класс для взаимодействия с устройствами Bluetooth, реализует графический интерфейс представления всех доступных устройств в радиусе действия Bluetooth.
+  The main class for interacting with Bluetooth devices implements a graphical interface for representing all available devices within Bluetooth range.
   
-  *Protected* методы:
-  * `onCreate` - вызывает приватные методы для инициализации, настройки и сканировании Bluetooh, определяет функции обратного вызова для кнопок `Filter ON/OFF` и `Multiple connect`
+  *Protected* methods:
+  * `onCreate` - Calls private methods for initializing, configuring and scanning Bluetooh, defines callback functions for the `Filter ON/OFF` and `Multiple connect` buttons calls private methods for initializing, configuring and scanning Bluetooh, defines callback functions for the `Filter ON/OFF` and `Multiple connect` buttons
   
-  *Private* методы:
-  * `getBTDeviceType` - определяет тип выбранного Bluetooth устройства перед непосредственным подключением
-  * `getBluetoothAdapterAndLeScanner` - инициализирует объекты классов `BluetoothAdapter` и `BluetoothLeScanner`
-  * `scanLeDevice` - по кнопке `SCAN`запускает сканирование устройств, до тех пор, пока не будет нажата кнопка `STOP`
+  *Private* methods:
+  * `getBTDeviceType` - determines the type of the selected Bluetooth device before connecting directly
+  * `getBluetoothAdapterAndLeScanner` - initializes objects of the `BluetoothAdapter` and `BluetoothLeScanner` classes
+  * `scanLeDevice` - the `SCAN` button starts scanning devices until the `STOP` button is pressed
   
-  *Inner* классы:
-  * `BluetoothDeviceExt` - класс, являющийся расширением класса `BluetoothDevice`. Позволяет более тесно связать Bluetooth устройство и его RSSI
+  *Inner* classes:
+  * `BluetoothDeviceExt` - a class that is an extension of the `BluetoothDevice` class. Allows you to more closely link a Bluetooth device and its RSSI
   
   #### ConnectionActivityDev
-  Данный класс реализует механизм подключения к Bluetooth устройству, подобный классу `LightManageActivity`, только для одного устройства. Строит графический интерфейс для прямого взаимодействия с сервисами и характеристиками GATT устойства через текстовые диалоговые окна
+  This class implements a mechanism for connecting to a Bluetooth device, similar to the `LightManageActivity` class, only for one device. Builds a graphical interface for direct interaction with the services and characteristics of the GATT device through text dialog boxes
   
   #### MultiConnectionActivityDev
-  Данный класс реализует механизм подключения к Bluetooth устройству, подобный классу `LightManageActivity`, сразу к нескольким устройствам BLightESP32. Строит единый графический интерфейс для прямого взаимодействия с сервисами и характеристиками GATT сразу всех устройств через текстовые диалоговые окна
+  This class implements a mechanism for connecting to a Bluetooth device, similar to the `LightManageActivity` class, to several BLightESP32 devices at once. Builds a single graphical interface for direct interaction with GATT services and characteristics of all devices at once through text dialog boxes
 
 </details>
 
 <details>
   <summary><h3>gatt_attr</h3></summary>
-  Данный модуль содержит в себе классы для хранения коллекций (словарей) соответствия UUID GATT сервисов, характеристик, дескрипторов и их имен.
+  This module contains classes for storing collections (dictionaries) UUID GATT matches of services, characteristics, descriptors and their names.
   
   #### AllGattServices
-  Содержит словарь названий сервисов и соответствующих им UUID
+  Contains a dictionary of service names and their corresponding UUIDs
   
   #### AllGattCharacteristics
-  Содержит словарь названий характеристик и соответствующих им UUID
+  Contains a dictionary of feature names and their corresponding UUIDs
   
   #### AllGattDescriptors
-  Содержит словарь названий дескрипторов и соответствующих им UUID
+  Contains a dictionary of descriptor names and their corresponding UUIDs
   
 </details>
   
 <details>
   <summary><h3>light_picker</h3></summary>
-  Данный модуль содержит в себе реализацию графического интерфейса для выбора светового режима в пользовательском режиме (User mode) работы приложения. Реализация модификацией библиотеки <a href="https://github.com/Madrapps/Pikolo"> Pikolo </a>
+  This module contains the implementation of a graphical interface for selecting the light mode in the user mode (User mode) of the application. Implementation by modification of the library <a href="https://github.com/Madrapps/Pikolo"> Pikolo </a>
 
 </details>
 
@@ -256,7 +256,7 @@
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-Приложение разработано в рамках НИР "Разработка механизмов проекцирования процессов жизнедеятельности пользователей в экосистему их цифровых ассистентов" №621308
+The application was developed within the framework of the research project "Development of mechanisms for designing the processes of users' vital activity into the ecosystem of their digital assistants" No. 621308
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
