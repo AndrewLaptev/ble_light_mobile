@@ -36,6 +36,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Implements a mechanism for connecting to a Bluetooth device, similar to the LightManageActivity class, 
+ * only for one device. Builds a graphical interface for direct interaction with the services and characteristics 
+ * of the GATT device through text dialog boxes
+ */
 @SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate() of MainActivity
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class ConnectionActivityDev extends AppCompatActivity {

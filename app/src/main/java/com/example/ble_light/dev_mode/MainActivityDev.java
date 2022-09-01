@@ -38,6 +38,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The main class for interacting with Bluetooth devices 
+ * implements a graphical interface for representing all available devices within Bluetooth range.
+ */
 @SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate()
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivityDev extends AppCompatActivity {
@@ -57,6 +61,9 @@ public class MainActivityDev extends AppCompatActivity {
     private boolean mScanning;
     private boolean nodeFilter = false;
 
+    /**
+     * Extension of the BluetoothDevice class. Allows you to more closely link a Bluetooth device and its RSSI
+     */
     public static class BluetoothDeviceExt {
         private BluetoothDevice mBluetoothDevice;
         private int RawRSSI;
@@ -89,7 +96,12 @@ public class MainActivityDev extends AppCompatActivity {
             return compDevice.getDevice().equals(getDevice());
         }
     }
-
+    
+    /**
+     * Calls private methods for initializing, configuring and scanning Bluetooh, 
+     * defines callback functions for the Filter ON/OFF and Multiple connect buttons calls private methods for initializing, 
+     * configuring and scanning Bluetooh, defines callback functions for the Filter ON/OFF and Multiple connect buttons
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,6 +226,9 @@ public class MainActivityDev extends AppCompatActivity {
                 }
             };
 
+    /**
+     * Determines the type of the selected Bluetooth device before connecting directly
+     */
     private String getBTDeviceType(BluetoothDevice d){
         String type = "";
         switch (d.getType()){
@@ -264,6 +279,9 @@ public class MainActivityDev extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Initializes objects of the BluetoothAdapter and BluetoothLeScanner classes
+     */
     private void getBluetoothAdapterAndLeScanner() {
         final BluetoothManager mBluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -272,11 +290,11 @@ public class MainActivityDev extends AppCompatActivity {
         mScanning = false;
     }
 
-    /*
-   to call startScan (ScanCallback callback),
-   Requires BLUETOOTH_ADMIN permission.
-   Must hold ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission to get results.
-    */
+    /**
+     * Start scan devices by button 
+     * 
+     * @param btnState SCAN button starts scanning devices until the STOP button is pressed
+     */
     private void scanLeDevice(String btnState) {
         if (btnState.equals(getString(R.string.scan_btn_enable))) {
             listBluetoothDevice.clear();

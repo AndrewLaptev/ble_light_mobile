@@ -37,6 +37,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Implements a mechanism for connecting to a Bluetooth device, similar to the LightManageActivity class, 
+ * to several BLightESP32 devices at once. Builds a single graphical interface for direct interaction with GATT 
+ * services and characteristics of all devices at once through text dialog boxes
+ */
 @SuppressWarnings({"MissingPermission"}) // all needed permissions granted in onCreate() of MainActivity
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MultiConnectionActivityDev extends AppCompatActivity {
