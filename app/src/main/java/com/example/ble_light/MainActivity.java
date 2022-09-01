@@ -40,6 +40,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The main class of the application, it contains entrypoint, access to settings, advanced mode, 
+ * and it is from it that device scanning is started with subsequent connection
+ */
 @SuppressLint("MissingPermission")
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MainActivity extends MainActivityDev {
@@ -67,6 +71,10 @@ public class MainActivity extends MainActivityDev {
 
     private final Kalman mKalman = new Kalman();
 
+    /**
+     * Implementing the Kalman filter has one public method filter(int init_rssi, ArrayList<Integer> rssi_list),
+     * which directly performs filtering
+     */
     private static class Kalman {
         private final double Q = 0.05;      // process_noise
         private final double R = 45.333332; // sensor_noise
@@ -96,6 +104,10 @@ public class MainActivity extends MainActivityDev {
         }
     }
 
+    /**
+     * Calls private methods for initializing, configuring and scanning Bluetooth, 
+     * as well as access rights for Bluetooth and checking for BLE support.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +180,9 @@ public class MainActivity extends MainActivityDev {
         });
     }
 
+    /**
+     * Init objects of the Bluetooth Adapter and Bluetooth Le Scanner classes
+     */
     private void getBluetoothAdapterAndLeScanner() {
         final BluetoothManager mBluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -175,6 +190,10 @@ public class MainActivity extends MainActivityDev {
         mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
     }
 
+    /**
+     * Starts scanning Bluetooth devices with a certain scan_period time, 
+     * passes a list of device addresses to the LightManageActivity class
+     */
     private void scanBleDevices(boolean start) {
         stateFindView.setText(R.string.state_find_search);
 
@@ -240,6 +259,9 @@ public class MainActivity extends MainActivityDev {
         }
     }
 
+    /**
+     * Calculates the average value of the RSSI signal strength from the input array of values
+     */
     private int meanRSSI(ArrayList<Integer> rssi_list) {
         int sumRSSI = 0;
         int divider = 0;
@@ -305,6 +327,9 @@ public class MainActivity extends MainActivityDev {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Loads the settings (scan_period) from root_preferences.xml
+     */
     private void loadSettings(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         scan_period = Integer.parseInt(sharedPreferences.getString(
