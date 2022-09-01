@@ -33,6 +33,13 @@ import com.example.ble_light.gatt_attr.AllGattServices;
 import com.example.ble_light.light_picker.Picker;
 import com.example.ble_light.light_picker.listeners.SimpleLightSelectionListener;
 
+
+/**
+ * Responsible for authentication and control of light modes on a connected Bluetooth device (services Authentication and Light manage). 
+ * Authentication is only needed to access the values entry in the Level of light characteristic for controlling light modes, 
+ * i.e. you can connect to the GATT of the BLightESP32 device and see its services and characteristics, but without authentication (access_token) 
+ * through the Authorization data characteristic, it will be impossible to control the light mode.
+ */
 @SuppressLint("ClickableViewAccessibility")
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class LightManageActivity extends AppCompatActivity {
@@ -69,6 +76,9 @@ public class LightManageActivity extends AppCompatActivity {
     private boolean authApprove = false;
     private boolean sendingApprove = false;
 
+    /**
+     * Connects to Bluetooth devices, also defines a callback method for reconnecting if it is not possible to connect the first time
+     */
     private void initServiceConnection() {
         Context context = getApplicationContext();
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
@@ -140,6 +150,9 @@ public class LightManageActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Passes authentication data (access_token) to the Authorization data characteristic for future access to recording light mode values in the Level of light characteristic
+     */
     private void authDataSending(String token) {
         mBluetoothLeService.writeCharacteristic(authServiceUUID, authCharacteristicUUID, token);
         authApprove = true;
@@ -179,6 +192,10 @@ public class LightManageActivity extends AppCompatActivity {
         return intentFilter;
     }
 
+    /**
+     * Performs initial calculations of the step of changing the light mode based on the selected settings, 
+     * initializes the visual interface for selecting the mode, initializes the connection to Bluetooth devices BLightESP32
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -255,7 +272,10 @@ public class LightManageActivity extends AppCompatActivity {
         });
         initServiceConnection();
     }
-
+    
+    /**
+     * Loads the settings (access_token, effect_color_temp_min_key, effect_color_temp_max_key) from root_preferences.xml
+     */
     private void loadSettings(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         access_token = sharedPreferences.getString(
