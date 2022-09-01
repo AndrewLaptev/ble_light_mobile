@@ -29,10 +29,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Service for managing connection and data communication with a GATT server hosted on a
- * given Bluetooth LE device.
+ * Containing all the necessary methods for creating and managing Bluetooth connections.
  */
-
 @SuppressWarnings({"MissingPermission"}) // all needed permissions granted in MainActivity.onCreate()
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class BluetoothLeService extends Service {
@@ -61,7 +59,11 @@ public class BluetoothLeService extends Service {
 
     public final static String STR_FILTER_SERVICE_UUID = AllGattServices.lookup("Light manage");
     public final static ParcelUuid PARCEL_FILTER_SERVICE_UUID = ParcelUuid.fromString(STR_FILTER_SERVICE_UUID);
-
+    
+    /**
+     * Class that is an extension of the BluetoothGatt class. Connects the Bluetooth device and the BluetoothGatt object more closely, 
+     * because the standard BluetoothGatt can connect to multiple devices, which does not provide data exchange with multiple devices at once.
+     */
     public class BluetoothGattExt {
         private BluetoothGatt mBluetoothGatt;
         private String mBluetoothDeviceAddress;
@@ -290,6 +292,11 @@ public class BluetoothLeService extends Service {
         return true;
     }
 
+    /**
+     * Connects to several GATT Bluetooth devices at once using the specified list of MAC addresses.
+     * 
+     * @param listAddresses The device addresses of the destination devices.
+     */
     public boolean multiconnect(final ArrayList<String> listAddresses) {
         boolean err = false;
         for (String address :listAddresses) {
@@ -302,11 +309,7 @@ public class BluetoothLeService extends Service {
     }
 
     /**
-     * Disconnects an existing connection or cancel a pending connection. The disconnection result
-     * is reported asynchronously through the
-     * {@code BluetoothGattCallback#onConnectionStateChange(
-     * android.bluetooth.BluetoothGatt, int, int)}
-     * callback.
+     * Disconnects an existing connection or cancel a pending connection
      */
     public void disconnect() {
         if (mBluetoothAdapter == null || listBluetoothGattsExt.isEmpty()) {
@@ -357,6 +360,14 @@ public class BluetoothLeService extends Service {
         }
     }
 
+    /**
+     * Request a write on a given {@code BluetoothGattCharacteristic}. The write result is reported
+     * asynchronously through the {@code BluetoothGattCallback#onCharacteristicWrite(
+     * android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
+     * callback.
+     *
+     * @param init_characteristic The characteristic to write.
+     */
     public void writeCharacteristic(BluetoothGattCharacteristic init_characteristic) {
         if (mBluetoothAdapter == null || listBluetoothGattsExt.isEmpty()) {
             Log.w(TAG, "BluetoothAdapter not initialized");
