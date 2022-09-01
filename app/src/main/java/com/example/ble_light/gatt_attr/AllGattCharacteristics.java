@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Contains a dictionary of feature names and their corresponding UUIDs
+ */
 public class AllGattCharacteristics {
     private static final HashMap<String, String> attributes = new HashMap();
 

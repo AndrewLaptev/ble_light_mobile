@@ -3,6 +3,9 @@ package com.example.ble_light.gatt_attr;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * Contains a dictionary of descriptor names and their corresponding UUIDs
+ */
 public class AllGattDescriptors {
     private static final HashMap<String, String> attributes = new HashMap();
 

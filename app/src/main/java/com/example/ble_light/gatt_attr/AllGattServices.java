@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Contains a dictionary of service names and their corresponding UUIDs
+ */
 public class AllGattServices {
     private static HashMap<String, String> attributes = new HashMap();
 
