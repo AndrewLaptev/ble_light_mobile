@@ -33,6 +33,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Implements an interface for user interaction with application settings via root_preferences.xml, 
+     * allows you to reset the settings to the default values. Basically, this class contains visual functionality, 
+     * so it will not be described in detail.
+     */
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
